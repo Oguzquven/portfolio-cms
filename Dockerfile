@@ -22,8 +22,7 @@ RUN addgroup -S portfolio && adduser -S portfolio -G portfolio \
     && mkdir -p /app/uploads /app/seed-uploads && chown -R portfolio:portfolio /app
 COPY --from=backend-build /workspace/backend/target/portfolio-api-*.jar /app/app.jar
 COPY --chown=portfolio:portfolio backend/uploads/ /app/seed-uploads/
-USER portfolio
 ENV SPRING_PROFILES_ACTIVE=postgres
 ENV PORTFOLIO_UPLOAD_DIR=/app/uploads
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "cp -n /app/seed-uploads/* /app/uploads/ 2>/dev/null || true; exec java -jar /app/app.jar"]
+ENTRYPOINT ["sh", "-c", "chown -R portfolio:portfolio /app/uploads && cp -n /app/seed-uploads/* /app/uploads/ && exec su portfolio -s /bin/sh -c 'exec java -jar /app/app.jar'"]
