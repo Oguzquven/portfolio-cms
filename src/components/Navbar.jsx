@@ -8,10 +8,9 @@ function Navbar({ settings }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  /* Tarayıcının küçük scroll geri yüklemeleri üstte gereksiz beyaz şerit
-     oluşturmasın; cam efektini ancak kullanıcı belirgin biçimde kaydırınca aç. */
+  /* 24px'den fazla kaydırınca cam efektini aç */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 96);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll(); // sayfa yenilendiğinde mevcut konumu hemen uygula
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
