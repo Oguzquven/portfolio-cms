@@ -44,9 +44,7 @@
   content: none;
 }
 
-/* Yalnızca soldaki metnin okunabilirliği için yatay geçiş.
-   Üstten inen beyaz katman kaldırıldı; navbar arkasındaki mavi form
-   artık soluk bir perdeyle kesilmiyor. */
+/* Navbar perdesi + soldan sağa içerik okunabilirlik perdesi. */
 .hero::after {
   content: "";
   position: absolute;
@@ -54,13 +52,20 @@
   z-index: 1;
   pointer-events: none;
 
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.6) 45%,
-    rgba(255, 255, 255, 0.18) 75%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.55) 80px,
+      rgba(255, 255, 255, 0) 170px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.6) 45%,
+      rgba(255, 255, 255, 0.18) 75%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
 }
 
 /* ========== SOL: METİN ========== */
@@ -425,20 +430,6 @@
 
 .hero__card-dot--green {
   background: #22c55e;
-}
-
-/* Masaüstünde iki cam kartı da ilk tasarımdaki dolgun ölçülerde tut. */
-@media (min-width: 901px) {
-  .hero__stats {
-    min-height: 128px;
-    padding-block: 1.35rem;
-  }
-
-  .hero__card {
-    min-width: 220px;
-    min-height: 154px;
-    padding: 1.25rem 1.4rem;
-  }
 }
 
 /* ========== MOBİL ========== */
