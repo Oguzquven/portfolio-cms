@@ -1,4 +1,12 @@
 /* Final navbar interaction colors — keep coral out of navigation controls. */
+.navbar.navbar--scrolled {
+  background: transparent;
+  border-bottom: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .navbar__menu a:not(.navbar__cta):hover,
 .navbar__menu a:not(.navbar__cta):focus-visible {
   color: #252b49;
