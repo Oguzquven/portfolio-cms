@@ -69,18 +69,16 @@
 .app__bg {
   position: absolute; /* fixed DEĞİL — sayfayla birlikte akar */
   inset: 0; /* tepeden dibe, soldan sağa tüm belge */
-  /* Katman 1 (perde): kenarlar %45 beyaz → sulu boya net görünür,
-     orta şerit %86 beyaz → içerik hep okunaklı.
-     Katman 2 (görsel): sayfaya bire bir gerilir, köşeler kırpılmaz */
-  background:
-    linear-gradient(
+  /* Eski page-bg.png dosyası projede bulunmadığı için production'da
+     /assets/assets/page-bg.png 404 veriyordu. Mevcut SVG dalga yüzeyiyle
+     uyumlu, dosyasız arka plan hem localde hem production'da aynıdır. */
+  background: linear-gradient(
       90deg,
       rgba(247, 251, 255, 0.45) 0%,
       rgba(247, 251, 255, 0.86) 20%,
       rgba(247, 251, 255, 0.86) 80%,
       rgba(247, 251, 255, 0.45) 100%
     ),
-    url("./assets/page-bg.png") center / 100% 100% no-repeat,
     #f7fbff;
   z-index: -1; /* tüm bölümlerin arkasında kal */
   pointer-events: none; /* tıklamaları asla engelleme */
