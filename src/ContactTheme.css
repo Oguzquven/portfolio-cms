@@ -1,0 +1,190 @@
+/* Contact finale — coral contrast with a fluid white transition. */
+.contact {
+  padding-top: clamp(10rem, 20vh, 14rem);
+  color: #252b49;
+  background: #f27178;
+}
+
+.contact__wave {
+  position: absolute;
+  z-index: 1;
+  top: -2px;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: clamp(150px, 16vw, 240px);
+  pointer-events: none;
+}
+
+.contact__wave path { fill: #ffffff; }
+
+.contact::before {
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(circle at 12% 28%, rgba(255,255,255,.22), transparent 28%),
+    radial-gradient(circle at 88% 72%, rgba(33,136,232,.11), transparent 30%);
+  animation: none;
+}
+
+.contact::after { content: none; }
+.contact__container { z-index: 2; }
+
+.contact__header { border-bottom-color: rgba(37,43,73,.18); }
+.contact__eyebrow { color: #252b49; }
+.contact__dot { background: #252b49; }
+.contact__small { color: rgba(37,43,73,.62); }
+.contact__title { color: #252b49; }
+.contact__title em { color: #ffffff; }
+.contact__text { color: rgba(37,43,73,.76); }
+
+.contact__link { border-top-color: rgba(37,43,73,.2); }
+.contact__link-number { color: rgba(255,255,255,.72); }
+.contact__link-body small { color: rgba(37,43,73,.58); }
+.contact__link-body strong { color: #252b49; }
+.contact__link-arrow { color: #252b49; }
+.contact__link:hover .contact__link-body strong,
+.contact__link:hover .contact__link-arrow { color: #ffffff; }
+
+.contact__content {
+  align-items: start;
+}
+
+.contact__form {
+  align-self: start;
+  height: auto;
+  padding-bottom: clamp(1.4rem, 2.2vw, 2.2rem);
+}
+
+.contact__link-arrow,
+.contact__submit-arrow {
+  display: none;
+}
+
+.contact__form {
+  border-color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.24);
+  box-shadow: 0 22px 48px rgba(37,43,73,.12);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+
+.contact__field label { color: rgba(37,43,73,.7); }
+.contact__field input,
+.contact__field textarea {
+  color: #252b49;
+  border-color: rgba(255,255,255,.58);
+  background: rgba(255,255,255,.28);
+}
+.contact__field input::placeholder,
+.contact__field textarea::placeholder { color: rgba(37,43,73,.45); }
+.contact__field input:focus,
+.contact__field textarea:focus {
+  border-color: #2188e8;
+  background: rgba(255,255,255,.72);
+}
+
+.contact__submit {
+  color: #ffffff;
+  background: #252b49;
+}
+.contact__submit:hover:not(:disabled) {
+  background: #2188e8;
+  box-shadow: 0 14px 32px rgba(37,43,73,.22);
+}
+
+.contact__note--success { color: #163f5c; }
+.contact__note--error { color: #252b49; }
+.contact__footer { border-top-color: rgba(37,43,73,.2); }
+.contact__footer-name strong { color: #252b49; }
+.contact__footer-name span,
+.contact__footer-meta span { color: rgba(37,43,73,.62); }
+.contact__top { color: #252b49; }
+.contact__top:hover { color: #ffffff; }
+
+@media (max-width: 900px) {
+  .contact { padding-top: 9rem; }
+  .contact__wave {
+    width: 145%;
+    left: -22%;
+    height: 150px;
+  }
+}
+
+/* Pure color mode: no glow, blur, gradients or shadows. */
+.contact {
+  background-color: #f27178;
+  background-image: none;
+  box-shadow: none;
+}
+
+.contact::before,
+.contact::after {
+  content: none;
+  background: none;
+  animation: none;
+}
+
+.contact *,
+.contact *::before,
+.contact *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.contact__form {
+  background: rgba(255,255,255,.22);
+}
+
+/* Minimal icon-led contact channels: no cards and no separators. */
+.contact__links {
+  gap: .3rem;
+}
+
+.contact__link {
+  gap: 1rem;
+  padding: .8rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.contact__link:hover {
+  background: transparent;
+  border-color: transparent;
+  transform: translateX(6px);
+}
+
+.contact__link-number { display: none; }
+
+.contact__link-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  color: #252b49;
+}
+
+.contact__link-icon svg {
+  width: 27px;
+  height: 27px;
+  fill: currentColor;
+}
+
+.contact__link-icon--linkedin { color: #0a66c2; }
+.contact__link-icon--mail { color: #252b49; }
+.contact__link-body { gap: .2rem; }
+.contact__link-body small {
+  color: rgba(37,43,73,.58);
+  font-size: clamp(.65rem,.72vw,.75rem);
+  letter-spacing: .02em;
+  text-transform: none;
+}
+.contact__link-body strong { color: #252b49; }
+.contact__link-arrow { color: #252b49; }
+.contact__link:hover .contact__link-body strong,
+.contact__link:hover .contact__link-arrow { color: #ffffff; }

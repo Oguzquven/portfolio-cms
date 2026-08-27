@@ -1,0 +1,3 @@
+package com.oguzguven.portfolio.hero;
+import jakarta.validation.constraints.*;
+public record HeroRequest(@NotBlank String eyebrow,@NotBlank String titlePrefix,@NotBlank String titleHighlight,@NotBlank String titleSuffix,@NotBlank @Size(max=1000) String description,@NotBlank String primaryText,@NotBlank String primaryUrl,@NotBlank String secondaryText,@NotBlank String secondaryUrl,@NotBlank String location,@NotBlank String availabilityLabel,@NotBlank String availabilityText,@Size(max=10_000_000) String photoUrl,String stat1Value,String stat1Label,String stat2Value,String stat2Label,String stat3Value,String stat3Label,String stat4Value,String stat4Label){}

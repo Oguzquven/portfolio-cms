@@ -1,0 +1,24 @@
+/* Experience timeline: blue-only palette. */
+.experience__list::before {
+  background: linear-gradient(90deg, #163f5c 0%, #8fc9fa 48%, #2188e8 100%);
+}
+
+.experience__item:first-child::before {
+  background: #2188e8;
+  box-shadow:
+    0 0 0 2px #8fc9fa,
+    0 0 0 8px rgba(33, 136, 232, .09);
+}
+
+.experience__item:hover::before,
+.experience__item--open::before {
+  color: #ffffff;
+  background: #252b49;
+  box-shadow: 0 0 0 7px rgba(37, 43, 73, .12);
+}
+
+@media (max-width: 900px) {
+  .experience__list::before {
+    background: linear-gradient(180deg, #163f5c 0%, #8fc9fa 48%, #2188e8 100%);
+  }
+}

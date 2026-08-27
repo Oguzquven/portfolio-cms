@@ -1,0 +1,1482 @@
+/* ============================================================
+   APP — Sayfa boyu arka plan:
+   page-bg.png sayfanın TAMAMINA gerilir (tepeden dibe).
+   Üstünde tek bir "perde" var: kenarlarda şeffaf
+   (sulu boya görünür), ortada opak beyaz (metin okunaklı).
+   Bölümlerin kendi zeminleri artık şeffaf.
+   ============================================================ */
+
+/* #root görselin ölçü referansı: sayfa ne kadar uzunsa katman o kadar */
+#root {
+  position: relative;
+}
+
+/* Hero ve Projects için tek, kesintisiz artwork katmanı */
+.hero-projects {
+  position: relative;
+  margin-top: -80px;
+  background: #f7fbff;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Hero'dan başlayıp Projects'te sonlanan kesintisiz pastel renk yüzeyi. */
+.hero-projects::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -5%;
+  right: -18%;
+  width: 58%;
+  height: 58%;
+  background: #2188e8;
+  border-radius: 48% 0 0 58% / 18% 0 0 42%;
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+.hero-projects::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 22%;
+  right: -8%;
+  width: 38%;
+  height: 26%;
+  background: #cbd5df;
+  border-radius: 58% 0 0 48% / 45% 0 0 55%;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .hero-projects {
+    margin-top: -72px;
+  }
+
+  .hero-projects::before {
+    right: -42%;
+    width: 92%;
+    height: 42%;
+  }
+
+  .hero-projects::after {
+    right: -34%;
+    width: 72%;
+    top: 17%;
+  }
+}
+
+.app__bg {
+  position: absolute; /* fixed DEĞİL — sayfayla birlikte akar */
+  inset: 0; /* tepeden dibe, soldan sağa tüm belge */
+  /* Katman 1 (perde): kenarlar %45 beyaz → sulu boya net görünür,
+     orta şerit %86 beyaz → içerik hep okunaklı.
+     Katman 2 (görsel): sayfaya bire bir gerilir, köşeler kırpılmaz */
+  background:
+    linear-gradient(
+      90deg,
+      rgba(247, 251, 255, 0.45) 0%,
+      rgba(247, 251, 255, 0.86) 20%,
+      rgba(247, 251, 255, 0.86) 80%,
+      rgba(247, 251, 255, 0.45) 100%
+    ),
+    url("./assets/page-bg.png") center / 100% 100% no-repeat,
+    #f7fbff;
+  z-index: -1; /* tüm bölümlerin arkasında kal */
+  pointer-events: none; /* tıklamaları asla engelleme */
+}
+
+/* Referanstaki asimetrik dalga: Hero'da başlar, Projects zeminiyle birleşir. */
+.hero-projects::before,
+.hero-projects::after {
+  content: none;
+}
+
+.hero-projects__wave {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: max(118vh, 980px);
+  display: block;
+  pointer-events: none;
+}
+
+.hero-projects__wave path {
+  fill: #2188e8;
+}
+
+@media (max-width: 900px) {
+  .hero-projects__wave {
+    display: none;
+  }
+
+  /* Mobilde masaüstü SVG'sini sıkıştırmak metnin üstünden geçiriyordu.
+     Hero temiz beyaz kalır; mavi yüzey Projects'in organik üst kenarında
+     yeniden başlayarak küçük ekranda okunabilirliği korur. */
+  .hero {
+    background: #f7fbff;
+  }
+
+  .projects {
+    overflow: visible;
+    background: #2188e8;
+  }
+
+  .projects::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    top: -34px;
+    left: -8%;
+    width: 116%;
+    height: 70px;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    background: #2188e8;
+    pointer-events: none;
+  }
+}
+
+/* Kompakt teknoloji bandı ve kısa Experience geçişi. */
+@media (min-width: 701px) {
+  .tech-marquee {
+    min-height: 335px;
+  }
+
+  .tech-marquee__track {
+    padding-top: 7.5rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .experience {
+    padding-top: clamp(9rem, 16vh, 11rem);
+  }
+
+  .experience__wave {
+    height: clamp(145px, 16vw, 190px);
+  }
+}
+
+@media (max-width: 700px) {
+  .stack__heading {
+    top: 0;
+    z-index: 4;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: .5rem;
+    margin-inline: calc(50% - 50vw);
+    padding: .9rem 1rem .65rem;
+    border: 0;
+    color: #ffffff;
+    background: #2188e8;
+    font-size: .58rem;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  .tech-marquee {
+    min-height: 0;
+    margin-top: -1px;
+    margin-bottom: -4px;
+    display: block;
+    background: #2188e8;
+  }
+
+  .tech-marquee__wave {
+    display: none;
+  }
+
+  .tech-marquee__track {
+    width: 100%;
+    padding: .35rem .7rem 1.35rem;
+  }
+
+  .tech-marquee__group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .2rem .35rem;
+    width: 100%;
+  }
+
+  .tech-marquee__item {
+    min-width: 0;
+    gap: .45rem;
+    padding: .42rem .25rem;
+    font-size: .74rem;
+  }
+
+  .tech-marquee__item img {
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+  }
+
+  .tech-marquee__item i {
+    width: 5px;
+    height: 5px;
+    margin-left: auto;
+    margin-right: .15rem;
+  }
+
+  .experience {
+    margin-top: 0;
+    padding-top: 7.5rem;
+  }
+
+  .experience__wave {
+    top: -2px;
+    left: -10%;
+    width: 120%;
+    height: 120px;
+  }
+}
+
+/* Tech island: kare ile akışkan form arasında, tek parça organik panel. */
+.stack__heading {
+  top: 0;
+  width: 88vw;
+  margin-left: calc(50% - 44vw);
+  padding: 2rem clamp(2rem, 4vw, 4.5rem) 1rem;
+  border: 0;
+  border-radius: 58px 24px 0 0;
+  color: #ffffff;
+  background: #2188e8;
+}
+
+.stack__heading span:first-child,
+.stack__heading span:last-child {
+  color: #ffffff;
+}
+
+.tech-marquee {
+  width: 88vw;
+  min-height: 0;
+  margin: -1px 0 0 calc(50% - 44vw);
+  overflow: hidden;
+  border-radius: 0 0 68px 30px;
+  background: #2188e8;
+  box-shadow: 0 24px 54px rgba(22, 63, 92, .16);
+}
+
+.tech-marquee__wave {
+  display: none;
+}
+
+.tech-marquee__track {
+  padding: .65rem clamp(2rem, 4vw, 4.5rem) 2.35rem;
+}
+
+.tech-marquee__group {
+  gap: .65rem 1.15rem;
+}
+
+@media (max-width: 700px) {
+  .stack__heading {
+    width: calc(100vw - 24px);
+    margin-left: calc(50% - 50vw + 12px);
+    padding: 1.25rem 1rem .65rem;
+    border-radius: 28px 16px 0 0;
+    font-size: .56rem;
+  }
+
+  .tech-marquee {
+    width: calc(100vw - 24px);
+    margin-left: calc(50% - 50vw + 12px);
+    margin-right: 0;
+    border-radius: 0 0 32px 18px;
+    background: #2188e8;
+    box-shadow: 0 18px 34px rgba(22, 63, 92, .15);
+  }
+
+  .tech-marquee__track {
+    padding: .35rem .75rem 1.35rem;
+  }
+}
+
+/* Projects ile About dalgası arasındaki büyük ekran render çizgisini kapat. */
+.about {
+  margin-top: -5px;
+  border-top: 0;
+}
+
+.about__wave {
+  top: -6px;
+  height: calc(clamp(190px, 22vw, 280px) + 8px);
+  transform: scaleX(1.003);
+  transform-origin: top center;
+}
+
+@media (max-width: 900px) {
+  .about {
+    margin-top: -4px;
+  }
+
+  .about__wave {
+    top: -5px;
+    height: 198px;
+  }
+}
+
+/* Tam mavi yüzey yerine içeriği saran asimetrik data-flow şeridi. */
+.tech-marquee {
+  min-height: 310px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.tech-marquee__track {
+  padding-top: 6.6rem;
+  padding-bottom: 1.4rem;
+}
+
+.stack__heading {
+  top: 72px;
+}
+
+@media (max-width: 700px) {
+  .stack__heading {
+    top: 0;
+    margin-bottom: 0;
+    padding-top: 1rem;
+    padding-bottom: .7rem;
+    background: #2188e8;
+  }
+
+  .tech-marquee {
+    min-height: 0;
+    margin-top: -1px;
+    background: #2188e8;
+    overflow: hidden;
+  }
+
+  .tech-marquee__track {
+    padding-top: .35rem;
+    padding-bottom: 1.15rem;
+  }
+}
+
+/* Experience üstündeki mavi geçiş kaldırıldı. */
+.experience {
+  margin-top: 0;
+  padding-top: clamp(4.5rem, 8vh, 6.5rem);
+}
+
+.experience__wave {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .experience {
+    padding-top: 4rem;
+  }
+}
+
+/* Navbar etkileşimleri: mercan yerine marka laciverti. */
+.navbar__menu a:not(.navbar__cta):hover,
+.navbar__menu a:not(.navbar__cta):focus-visible {
+  color: #252b49;
+  box-shadow: inset 0 -2px #252b49;
+}
+
+.navbar__menu a.navbar__cta {
+  color: #ffffff;
+  background: #2188e8;
+}
+
+.navbar__menu a.navbar__cta:hover,
+.navbar__menu a.navbar__cta:focus-visible {
+  color: #ffffff;
+  background: #252b49;
+  box-shadow: 0 10px 24px rgba(22, 63, 92, .2);
+}
+
+.navbar__language-indicator {
+  transition:
+    transform 280ms cubic-bezier(.22, 1, .36, 1),
+    background-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.navbar__language:hover .navbar__language-indicator,
+.navbar__language:focus-visible .navbar__language-indicator {
+  background: #252b49;
+  box-shadow: 0 4px 12px rgba(37, 43, 73, .24);
+}
+
+/* EXPERIENCE V3 — beyaz zeminde yatay kariyer rotası. */
+.experience {
+  margin-top: 0;
+  padding-top: clamp(4.5rem, 8vh, 6.5rem);
+  background: #ffffff;
+}
+
+.experience::before,
+.experience__wave {
+  display: none;
+  content: none;
+}
+
+.experience__header {
+  padding-bottom: clamp(2.5rem, 5vh, 4rem);
+  border: 0;
+}
+
+.experience__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  padding: 0;
+}
+
+.experience__list::before {
+  left: 4%;
+  right: 4%;
+  top: 20px;
+  bottom: auto;
+  width: auto;
+  height: 3px;
+  background: linear-gradient(90deg, #f27178 0%, #8fc9fa 48%, #2188e8 100%);
+  box-shadow: none;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.experience__list.is-visible::before {
+  transform: scaleX(1);
+}
+
+.experience__item {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 4.75rem clamp(.25rem, 1vw, 1rem) 2rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.experience__item + .experience__item {
+  border: 0;
+}
+
+.experience__item::before {
+  content: "";
+  left: 50%;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border: 5px solid #ffffff;
+  border-radius: 50%;
+  background: #2188e8;
+  box-shadow: 0 0 0 2px #8fc9fa, 0 0 0 8px rgba(33, 136, 232, .08);
+  transform: translateX(-50%);
+}
+
+.experience__item:first-child::before {
+  background: #f27178;
+  box-shadow: 0 0 0 2px #f7b1b5, 0 0 0 8px rgba(242, 113, 120, .09);
+}
+
+.experience__item::after {
+  display: none;
+}
+
+.experience__item:hover,
+.experience__item--open {
+  background: transparent;
+  box-shadow: none;
+  transform: translateY(-4px);
+}
+
+.experience__trigger:focus-visible {
+  outline: 2px dashed #2188e8;
+  outline-offset: 7px;
+  border-radius: 18px;
+}
+
+.experience__period {
+  position: absolute;
+  top: 2.65rem;
+  left: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  padding: .4rem .75rem;
+  border-radius: 999px;
+  color: #163f5c;
+  background: #eef7ff;
+  font-size: clamp(.62rem, .7vw, .72rem);
+  font-weight: 750;
+  letter-spacing: .02em;
+  transform: translateX(-50%);
+}
+
+.experience__meta {
+  align-items: center;
+  text-align: center;
+}
+
+.experience__number {
+  margin-top: 1rem;
+  color: #f27178;
+  font-family: var(--font-primary, "Poppins", sans-serif);
+  font-size: .72rem;
+  letter-spacing: .12em;
+}
+
+.experience__company-row {
+  justify-content: center;
+}
+
+.experience__company {
+  font-size: clamp(1.35rem, 1.8vw, 2rem);
+  letter-spacing: -.04em;
+}
+
+.experience__body {
+  align-items: center;
+  margin-top: 1.25rem;
+  text-align: center;
+}
+
+.experience__role-row {
+  width: 100%;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.experience__role {
+  font-size: clamp(.9rem, 1vw, 1.05rem);
+}
+
+.experience__role-side {
+  position: absolute;
+  right: .25rem;
+}
+
+.experience__details-inner {
+  align-items: center;
+  padding: 0;
+}
+
+.experience__description {
+  max-width: 38ch;
+  text-align: center;
+}
+
+.experience__technologies {
+  justify-content: center;
+}
+
+.experience__year {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .experience {
+    padding-top: 4rem;
+  }
+
+  .experience__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 0 0 46px;
+  }
+
+  .experience__list::before {
+    left: 14px;
+    right: auto;
+    top: 18px;
+    bottom: 18px;
+    width: 3px;
+    height: auto;
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+
+  .experience__list.is-visible::before {
+    transform: scaleY(1);
+  }
+
+  .experience__item {
+    padding: 3.5rem .25rem 2.5rem 1rem;
+  }
+
+  .experience__item + .experience__item {
+    border-top: 1px solid rgba(22, 63, 92, .1);
+  }
+
+  .experience__item::before,
+  .experience__item:first-child::before {
+    left: -42px;
+    top: 18px;
+    width: 16px;
+    height: 16px;
+    transform: none;
+  }
+
+  .experience__period {
+    top: 10px;
+    left: 0;
+    transform: none;
+  }
+
+  .experience__meta,
+  .experience__body,
+  .experience__details-inner {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .experience__company-row,
+  .experience__role-row,
+  .experience__technologies {
+    justify-content: flex-start;
+  }
+
+  .experience__description {
+    max-width: none;
+    text-align: left;
+  }
+}
+
+/* FINAL EXPERIENCE — tek omurgalı, tarih aralıklı ve çerçevesiz timeline. */
+.experience {
+  margin-top: 0;
+  padding-top: clamp(4.5rem, 8vh, 6.5rem);
+  background: #f7fbff;
+}
+
+.experience::before {
+  content: none;
+  animation: none;
+}
+
+.experience__header {
+  border-bottom: 0;
+  padding-bottom: clamp(2rem, 4vh, 3rem);
+}
+
+.experience__list {
+  gap: 0;
+  padding: 1rem 0 0 190px;
+}
+
+.experience__list::before {
+  left: 72px;
+  top: 2.5rem;
+  bottom: 2.5rem;
+  width: 3px;
+  background: linear-gradient(180deg, #2188e8 0%, #8fc9fa 58%, #f27178 100%);
+  box-shadow: 0 0 0 7px rgba(33, 136, 232, .055);
+}
+
+.experience__item {
+  grid-template-columns: minmax(220px, .82fr) minmax(0, 1.18fr);
+  gap: clamp(2rem, 4vw, 5rem);
+  margin: 0;
+  padding: clamp(2.25rem, 4vw, 3.5rem) clamp(1rem, 2vw, 2rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.experience__item + .experience__item {
+  border-top: 1px solid rgba(22, 63, 92, .12);
+}
+
+.experience__item:hover,
+.experience__item--open {
+  background: linear-gradient(90deg, rgba(33, 136, 232, .05), transparent 74%);
+  box-shadow: none;
+}
+
+.experience__item::before {
+  content: attr(data-period);
+  left: -198px;
+  top: 50%;
+  width: 160px;
+  height: 44px;
+  border: 4px solid #f7fbff;
+  border-radius: 999px;
+  color: #163f5c;
+  background: #ffffff;
+  box-shadow: 0 0 0 2px #8fc9fa, 0 10px 22px rgba(22, 63, 92, .1);
+  font-family: var(--font-primary, "Poppins", sans-serif);
+  font-size: .66rem;
+  font-weight: 750;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+.experience__item:hover::before,
+.experience__item--open::before {
+  color: #ffffff;
+  background: #2188e8;
+  box-shadow: 0 0 0 5px rgba(33, 136, 232, .14), 0 12px 26px rgba(22, 63, 92, .14);
+}
+
+.experience__item::after {
+  left: -38px;
+  top: 50%;
+  width: 38px;
+  height: 2px;
+  background: linear-gradient(90deg, #8fc9fa, rgba(143, 201, 250, .2));
+}
+
+.experience__number {
+  color: #f27178;
+}
+
+.experience__details-inner {
+  padding-right: clamp(1rem, 4vw, 4rem);
+}
+
+.experience__description {
+  max-width: 68ch;
+}
+
+.experience__year {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .experience {
+    padding-top: 4rem;
+  }
+
+  .experience__list {
+    padding: .5rem 0 0 58px;
+  }
+
+  .experience__list::before {
+    left: 18px;
+    top: 1rem;
+    bottom: 1rem;
+  }
+
+  .experience__item {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 4.5rem .25rem 2.25rem 1rem;
+  }
+
+  .experience__item::before {
+    left: -52px;
+    top: 1.15rem;
+    width: 148px;
+    height: 38px;
+    font-size: .6rem;
+    transform: none;
+  }
+
+  .experience__item::after {
+    display: none;
+  }
+}
+/* Dalga Hero sınırında kesilmez; Projects üst boşluğunda tamamlanır. */
+.hero-projects__wave {
+  height: 100%;
+}
+
+@media (max-width: 900px) {
+  .hero-projects__wave {
+    height: 100%;
+  }
+}
+/* ============================================================
+   SITE-WIDE SOFT-TECH / FLUID MINIMAL DESIGN SYSTEM
+   ============================================================ */
+
+:where(.hero__title,.about__title,.experience__title,.experience__company,.contact__title,.stack__column-header h3,.stack__column-header span,.experience__number,.contact__link-number) {
+  font-family: var(--font-primary, "Poppins", sans-serif);
+  letter-spacing: -0.04em;
+}
+
+:where(.hero__title em,.about__title em,.experience__title em,.contact__title em) {
+  font-family: inherit;
+  font-style: normal;
+  color: #2188e8;
+}
+
+/* Navbar */
+.navbar__inner { height: 76px; }
+.navbar--scrolled {
+  background: rgba(247,251,255,.78);
+  border-bottom: 1px solid rgba(203,213,223,.52);
+  box-shadow: 0 10px 35px rgba(22,63,92,.08);
+}
+.navbar__menu { gap: 10px; padding: 6px; border: 1px solid rgba(203,213,223,.55); border-radius: 16px; background: rgba(247,251,255,.66); backdrop-filter: blur(14px); }
+.navbar__menu a { padding: 9px 13px; border-radius: 10px; font-weight: 600; }
+.navbar__menu a::after { content:none; }
+.navbar__menu a:not(.navbar__cta):hover { color:#2188e8; background:rgba(33,136,232,.09); }
+.navbar__menu a.navbar__cta { padding:10px 18px; border-radius:11px; }
+.navbar__menu a.navbar__cta:hover { color:#ffffff; background:#252b49; box-shadow:0 10px 24px rgba(22,63,92,.2); }
+
+/* Hero */
+.hero__eyebrow,.about__eyebrow,.experience__eyebrow,.contact__eyebrow {
+  width:fit-content;
+  padding:.55rem .85rem;
+  border:1px solid rgba(33,136,232,.22);
+  border-radius:999px;
+  background:rgba(247,251,255,.72);
+  letter-spacing:.14em;
+}
+.hero__title {
+  max-width:10.5em;
+  font-size:clamp(2.8rem,4.7vw,5.6rem);
+  font-weight:720;
+  line-height:1.02;
+  letter-spacing:-.065em;
+}
+.hero__title em { color:#2188e8; }
+.hero__primary,.hero__secondary { border-radius:14px; padding:1rem 1.45rem; }
+.hero__primary:hover { background:#2188e8; box-shadow:0 14px 30px rgba(33,136,232,.26); }
+.hero__secondary:hover { background:#f7fbff; border-color:#2188e8; }
+.hero__stats { border-radius:24px; background:rgba(247,251,255,.82); }
+.hero__photo { border-radius:38px; }
+.hero__media::after { border-radius:46px; }
+.hero__card { border-radius:18px; background:rgba(247,251,255,.78); }
+
+/* Shared section headers */
+.about__header,.experience__header,.contact__header { align-items:center; border-bottom:0; padding-bottom:1.25rem; }
+.about__title,.experience__title,.contact__title {
+  font-size:clamp(2.35rem,4.4vw,5rem);
+  font-weight:720;
+  line-height:1.02;
+  letter-spacing:-.055em;
+}
+
+/* About */
+.about { background:#f7fbff; }
+.about__intro { align-items:center; }
+.about__bio { padding:clamp(1.4rem,2.2vw,2.2rem); border:1px solid rgba(203,213,223,.68); border-radius:24px; background:rgba(255,255,255,.78); box-shadow:0 14px 38px rgba(22,63,92,.07); }
+.about__label { color:#2188e8; }
+.about__link { padding:.8rem 1rem; border:1px solid rgba(33,136,232,.3); border-radius:12px; background:rgba(33,136,232,.07); letter-spacing:.09em; }
+.about__link::after { content:none; }
+.about__link:hover { color:#252b49; background:#f27178; border-color:#f27178; transform:translateY(-2px); }
+.stack__heading { border-bottom:0; padding:1rem 1.15rem; border-radius:14px; background:rgba(33,136,232,.08); }
+.stack__column { border-radius:26px; background:rgba(255,255,255,.84); }
+.stack__column-header span { display:grid; place-items:center; width:36px; height:36px; border-radius:11px; color:#252b49; background:#cbd5df; font-size:.72rem; letter-spacing:0; }
+.stack__column-header h3 { font-size:clamp(1.25rem,1.65vw,1.8rem); font-weight:700; letter-spacing:-.035em; }
+.stack__column--featured { background:#163f5c; }
+.stack__column--featured .stack__column-header span { color:#252b49; background:#f27178; }
+
+/* Experience */
+.experience { background:#eef5fa; }
+.experience__list { display:flex; flex-direction:column; gap:1rem; padding-top:2rem; }
+.experience__list::before,.experience__item::before { content:none; }
+.experience__item {
+  grid-template-columns:.85fr 1.15fr;
+  padding:clamp(1.5rem,2.8vw,2.5rem);
+  border:1px solid rgba(203,213,223,.72);
+  border-radius:24px;
+  background:rgba(255,255,255,.78);
+  box-shadow:0 10px 30px rgba(22,63,92,.06);
+  transition:opacity .7s ease,transform .35s ease,border-color .35s ease,box-shadow .35s ease;
+}
+.experience__item:hover,.experience__item--open { transform:translateY(-4px); border-color:rgba(33,136,232,.48); box-shadow:0 20px 44px rgba(22,63,92,.12); }
+.experience__number { display:grid; place-items:center; width:38px; height:38px; border-radius:12px; color:#252b49; background:#f27178; font-size:.72rem; letter-spacing:0; }
+.experience__company { font-size:clamp(1.35rem,2vw,2.25rem); font-weight:700; }
+.experience__year,.experience__tag { border-radius:10px; }
+.experience__chevron { border-radius:11px; }
+
+/* Contact */
+.contact { background:#2188e8; color:#ffffff; }
+.contact__content { align-items:stretch; }
+.contact__intro { padding:clamp(1.2rem,2vw,2rem) 0; }
+.contact__links { gap:.65rem; }
+.contact__link { padding:1rem 1.1rem; border:1px solid rgba(37,43,73,.18); border-radius:14px; background:rgba(255,255,255,.14); transition:transform .3s ease,background .3s ease,border-color .3s ease; }
+.contact__link:hover { transform:translateX(5px); background:rgba(255,255,255,.3); border-color:rgba(255,255,255,.62); }
+.contact__link-number { display:grid; place-items:center; width:34px; height:34px; border-radius:10px; color:#fff; background:#252b49; font-size:.7rem; letter-spacing:0; }
+.contact__form { border-radius:26px; background:rgba(255,255,255,.24); }
+.contact__field input,.contact__field textarea { border-radius:12px; }
+.contact__submit { border-radius:12px; }
+.contact__submit:hover:not(:disabled) { color:#fff; background:#2188e8; }
+.contact__top { padding:.75rem .9rem; border-radius:11px; background:rgba(255,255,255,.18); }
+.contact__top::after { content:none; }
+.contact__top:hover { color:#fff; background:#252b49; }
+
+@media(max-width:900px){
+  .navbar__menu{border:0;border-radius:0;background:#fff}
+  .experience__item{grid-template-columns:1fr}
+  .about__header,.experience__header,.contact__header{align-items:flex-start}
+}
+
+/* Experience v2: kesintisiz yüzey, çerçevesiz satırlar ve monitör seam düzeltmesi. */
+.tech-marquee {
+  margin-bottom: -5px;
+}
+
+/* Geniş ekranda teknoloji satırlarının altındaki gereksiz mavi boşluğu azalt. */
+@media (min-width: 701px) {
+  .tech-marquee {
+    min-height: clamp(370px, 43vh, 455px);
+  }
+
+  .tech-marquee__track {
+    padding-bottom: 2rem;
+  }
+}
+
+.experience {
+  margin-top: -5px;
+  border-top: 0;
+}
+
+.experience__wave {
+  top: -6px;
+  height: calc(clamp(220px, 25vw, 320px) + 8px);
+  display: block;
+  transform: scaleX(1.004);
+  transform-origin: top center;
+}
+
+.experience__list {
+  gap: 0;
+  padding-top: 2rem;
+}
+
+.experience__item {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0;
+  padding-top: clamp(2rem, 4vw, 3.25rem);
+  padding-bottom: clamp(2rem, 4vw, 3.25rem);
+  transition: opacity .7s ease, transform .35s ease, background .35s ease;
+}
+
+.experience__item + .experience__item {
+  border-top: 1px solid rgba(22, 63, 92, .14);
+}
+
+.experience__item:hover,
+.experience__item--open {
+  background: linear-gradient(90deg, rgba(33, 136, 232, .045), transparent 72%);
+  box-shadow: none;
+}
+
+.experience__item.is-visible:hover {
+  transform: translateX(6px);
+}
+
+.experience__trigger:focus-visible {
+  border-radius: 0;
+}
+
+.experience__details-inner {
+  padding-right: clamp(1rem, 4vw, 4rem);
+}
+
+.experience__description {
+  max-width: 68ch;
+}
+
+.experience__chevron {
+  border: 0;
+  background: rgba(33, 136, 232, .09);
+}
+
+.experience__item--open .experience__chevron {
+  box-shadow: 0 8px 20px rgba(33, 136, 232, .2);
+}
+
+@media (max-width: 900px) {
+  .experience {
+    margin-top: -4px;
+  }
+
+  .experience__wave {
+    top: -5px;
+    height: 238px;
+  }
+
+  .experience__item.is-visible:hover {
+    transform: none;
+  }
+}
+/* Navbar menüsünde yalnızca Contact bağımsız CTA olarak kalır. */
+.navbar__menu {
+  gap: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.navbar__menu a:not(.navbar__cta) {
+  padding: 8px 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.navbar__menu a:not(.navbar__cta):hover,
+.navbar__menu a:not(.navbar__cta):focus-visible {
+  background: transparent;
+  color: #252b49;
+  box-shadow: inset 0 -2px #252b49;
+}
+
+@media (max-width: 768px) {
+  .navbar__menu {
+    gap: 24px;
+    padding: 24px 24px 32px;
+    background: #ffffff;
+  }
+}
+/* About: dalganın altında düz beyaz zemin ve kartsız biyografi. */
+.about {
+  background: #ffffff;
+}
+
+.about::before,
+.about::after {
+  content: none;
+  animation: none;
+  background: none;
+}
+
+.about__bio {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+/* Tech stack üst başlığı: kapsülsüz, düz beyaz zeminde. */
+.stack__heading {
+  padding: 0 0 clamp(1.25rem, 2.5vh, 2rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+/* Kartsız teknoloji matrisi. */
+.stack__grid{grid-template-columns:repeat(3,1fr);gap:0;padding-top:clamp(1.5rem,3vh,2.5rem)}
+.about .stack__column,.about .stack__column--featured{position:relative;min-height:330px;padding:clamp(1.5rem,2.8vw,2.8rem);border:0;border-left:1px solid #dce5ec;border-radius:0;color:#252b49;background:transparent;box-shadow:none}.about .stack__column:first-child{border-left:0}
+.about .stack__column:before{content:"";position:absolute;top:0;left:clamp(1.5rem,2.8vw,2.8rem);width:48px;height:5px;border-radius:999px;background:#f27178;transition:width .4s ease}.about .stack__column:nth-child(2):before{background:#2188e8}.about .stack__column:nth-child(3):before{background:#163f5c}.about .stack__column.is-visible:hover{transform:none;border-color:#dce5ec;box-shadow:none}.about .stack__column:hover:before{width:96px}
+.about .stack__column-header{align-items:center;gap:.8rem;margin-top:.75rem}.about .stack__column-header span,.about .stack__column--featured .stack__column-header span{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;color:#252b49;background:#f7b1b5;font-family:var(--font-primary,"Poppins",sans-serif);font-size:.7rem;font-weight:800}.about .stack__column:nth-child(2) .stack__column-header span{background:#b9ddfb}.about .stack__column:nth-child(3) .stack__column-header span{background:#cbd5df}
+.about .stack__column-header h3,.about .stack__column--featured .stack__column-header h3{color:#252b49;font-family:var(--font-primary,"Poppins",sans-serif);font-size:clamp(1.35rem,1.8vw,2rem);font-weight:720;letter-spacing:-.04em}.stack__description{margin:.8rem 0 1.5rem;color:rgba(37,43,73,.58);font-size:clamp(.76rem,.82vw,.88rem);line-height:1.5}
+.about .stack__items{flex-direction:row;flex-wrap:wrap;gap:.65rem}.about .stack__item,.about .stack__column--featured .stack__item{width:fit-content;padding:.65rem .8rem;border:1px solid #dce5ec;border-radius:12px;color:#163f5c;background:#f7fbff;font-size:clamp(.78rem,.88vw,.94rem);transition:transform .25s ease,color .25s ease,background .25s ease,border-color .25s ease}.about .stack__item:hover{transform:translateY(-3px);color:#252b49;background:#fff0f1;border-color:#f27178}.about .stack__column:nth-child(2) .stack__item:hover{background:#e9f5ff;border-color:#2188e8}.about .stack__column:nth-child(3) .stack__item:hover{background:#edf1f4;border-color:#163f5c}
+@media(max-width:900px){.stack__grid{grid-template-columns:1fr}.about .stack__column,.about .stack__column--featured{min-height:0;padding:2.25rem 0;border-left:0;border-top:1px solid #dce5ec}.about .stack__column:first-child{border-top:0}.about .stack__column:before{left:0}}
+/* Tek yatay teknoloji flaması / marquee. */
+.tech-marquee{position:relative;width:100%;margin-top:clamp(1.5rem,3vh,2.5rem);overflow:hidden;opacity:0;transform:translateY(28px);color:#163f5c;background:#dceeff;clip-path:polygon(24px 50%,0 0,calc(100% - 34px) 0,100% 50%,calc(100% - 34px) 100%,0 100%);transition:opacity .7s ease,transform .7s ease}.tech-marquee.is-visible{opacity:1;transform:translateY(0)}
+.tech-marquee__track{display:flex;width:max-content;padding:1.15rem 0;animation:techMarquee 34s linear infinite;will-change:transform}.tech-marquee__group{display:flex;align-items:center;flex-shrink:0;padding-left:1.4rem}
+.tech-marquee__item{display:inline-flex;align-items:center;gap:.65rem;flex-shrink:0;margin-right:.35rem;padding:.7rem .85rem;border:1px solid transparent;border-radius:12px;font-size:clamp(.78rem,.9vw,.96rem);font-weight:600;white-space:nowrap;transition:transform .25s ease,color .25s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease}.tech-marquee__item img{width:20px;height:20px;object-fit:contain}.tech-marquee__item i{width:6px;height:6px;margin-left:.35rem;border-radius:50%;background:#f27178;opacity:.8}
+.tech-marquee:hover .tech-marquee__track,.tech-marquee:focus-within .tech-marquee__track{animation-play-state:paused}.tech-marquee__item:hover,.tech-marquee__item:focus-visible{z-index:1;color:#252b49;background:#fff;border-color:#8fc9fa;box-shadow:0 10px 24px rgba(22,63,92,.14);transform:translateY(-3px);outline:none}
+@keyframes techMarquee{to{transform:translateX(-50%)}}
+@media(max-width:700px){.tech-marquee{overflow-x:auto;clip-path:none;border-radius:16px;scrollbar-width:none}.tech-marquee::-webkit-scrollbar{display:none}.tech-marquee__track{animation:none;padding:.85rem 0}.tech-marquee__group:nth-child(2){display:none}.tech-marquee__group{padding-inline:1rem}.tech-marquee__item{padding:.65rem .75rem}}
+@media(prefers-reduced-motion:reduce){.tech-marquee{opacity:1;transform:none}.tech-marquee__track{animation:none}.tech-marquee__group:nth-child(2){display:none}}
+/* Teknoloji flaması: marka paletindeki canlı mavi. */
+.tech-marquee {
+  color: #ffffff;
+  background: #2188e8;
+}
+
+.tech-marquee__item {
+  color: #ffffff;
+}
+
+.tech-marquee__item:hover,
+.tech-marquee__item:focus-visible {
+  color: #252b49;
+  background: #ffffff;
+  border-color: #f27178;
+}
+/* Sivri flama yerine sabit, asimetrik dalga yüzeyi. */
+.tech-marquee {
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  background: transparent;
+  clip-path: none;
+}
+
+.tech-marquee__wave {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.tech-marquee__wave path {
+  fill: #2188e8;
+}
+
+.tech-marquee__track {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 0;
+}
+
+@media (max-width: 700px) {
+  .tech-marquee {
+    min-height: auto;
+    background: #2188e8;
+    border-radius: 18px;
+  }
+
+  .tech-marquee__wave {
+    display: none;
+  }
+
+  .tech-marquee__track {
+    padding: 1rem 0;
+  }
+}
+/* Tam genişlik, sabit teknoloji dalgası: marquee hareketi kaldırıldı. */
+.tech-marquee {
+  width: 100vw;
+  min-height: 190px;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow: visible;
+}
+
+.tech-marquee__track {
+  width: 100%;
+  padding: 2.8rem clamp(2rem, 7vw, 8rem);
+  animation: none;
+  will-change: auto;
+}
+
+.tech-marquee__group {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+}
+
+.tech-marquee__group:nth-child(2) {
+  display: none;
+}
+
+.tech-marquee__item {
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .tech-marquee {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow: visible;
+    border-radius: 0;
+  }
+
+  .tech-marquee__wave {
+    display: block;
+  }
+
+  .tech-marquee__track {
+    width: 100%;
+    padding: 2.5rem 1.25rem;
+  }
+
+  .tech-marquee__group {
+    justify-content: center;
+  }
+}
+/* Teknoloji dalgası About sonuna, Experience başlangıcına kadar iner. */
+.about {
+  padding-bottom: 0;
+}
+
+.tech-marquee {
+  min-height: clamp(320px, 38vh, 430px);
+  margin-bottom: 0;
+}
+
+.tech-marquee__track {
+  align-self: center;
+}
+
+@media (max-width: 700px) {
+  .tech-marquee {
+    min-height: 300px;
+  }
+}
+/* Tech başlığı da dalganın içinde; daha güçlü asimetri ve büyük logolar. */
+.stack__heading {
+  position: relative;
+  z-index: 3;
+  color: #ffffff;
+  padding-top: 1rem;
+}
+
+.stack__heading span:last-child {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tech-marquee {
+  min-height: clamp(440px, 52vh, 560px);
+  margin-top: -105px;
+}
+
+.tech-marquee__track {
+  padding-top: 8.5rem;
+  padding-bottom: 3.5rem;
+}
+
+.tech-marquee__item {
+  gap: 0.8rem;
+  padding: 0.8rem 0.95rem;
+  font-size: clamp(0.9rem, 1.02vw, 1.1rem);
+}
+
+.tech-marquee__item img {
+  width: clamp(30px, 2.1vw, 38px);
+  height: clamp(30px, 2.1vw, 38px);
+}
+
+@media (max-width: 700px) {
+  .stack__heading {
+    padding-top: 1.5rem;
+  }
+
+  .tech-marquee {
+    min-height: 430px;
+    margin-top: -95px;
+  }
+
+  .tech-marquee__track {
+    padding-top: 8rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .tech-marquee__item img {
+    width: 30px;
+    height: 30px;
+  }
+}
+/* Tech başlıklarını dalganın güvenli mavi alanına yerleştir. */
+.stack__heading {
+  top: 92px;
+  color: #ffffff;
+}
+
+.stack__heading span:first-child,
+.stack__heading span:last-child {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(22, 63, 92, 0.18);
+}
+
+/* About CTA: paletin canlı mavisi. */
+.about__link {
+  color: #ffffff;
+  background: #2188e8;
+  border-color: #2188e8;
+  box-shadow: 0 10px 24px rgba(33, 136, 232, 0.2);
+}
+
+.about__link:hover,
+.about__link:focus-visible {
+  color: #252b49;
+  background: #f27178;
+  border-color: #f27178;
+  box-shadow: 0 14px 30px rgba(22, 63, 92, 0.2);
+}
+
+@media (max-width: 700px) {
+  .stack__heading {
+    top: 82px;
+  }
+}
+/* Experience: çapraz dalga geçişi + gerçek zaman çizgisi. */
+.experience {
+  padding-top: clamp(16rem, 31vh, 22rem);
+}
+
+.experience__wave {
+  position: absolute;
+  z-index: 0;
+  top: -1px;
+  left: 0;
+  width: 100%;
+  height: clamp(220px, 25vw, 320px);
+  pointer-events: none;
+}
+
+.experience__wave path { fill:#2188e8; }
+
+.experience .experience__title,
+.experience .experience__company {
+  font-family: var(--font-primary, "Poppins", sans-serif);
+  font-style: normal;
+  letter-spacing: -0.05em;
+}
+
+.experience .experience__title { font-weight:720; }
+.experience .experience__title em { font-family:inherit;font-style:normal;color:#2188e8; }
+.experience .experience__company { font-weight:700; }
+
+.experience__list {
+  position: relative;
+  gap: 1.35rem;
+  padding: 2.5rem 0 0 86px;
+}
+
+.experience__list::before {
+  content: "";
+  position: absolute;
+  left: 27px;
+  top: 3.2rem;
+  bottom: 2.5rem;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg,#2188e8 0%,#8fc9fa 65%,#f27178 100%);
+  transform: none;
+}
+
+.experience__item::before {
+  content: attr(data-year);
+  position: absolute;
+  z-index: 4;
+  left: -86px;
+  top: 50%;
+  width: 58px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #eef5fa;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #2188e8;
+  box-shadow: 0 0 0 2px rgba(33,136,232,.28);
+  font-family: var(--font-primary,"Poppins",sans-serif);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  transform: translateY(-50%);
+}
+
+.experience__item::after {
+  content: "";
+  position: absolute;
+  left: -29px;
+  top: 50%;
+  width: 29px;
+  height: 2px;
+  background: #8fc9fa;
+  transform: translateY(-50%);
+}
+
+.experience__item:hover::before,
+.experience__item--open::before {
+  color:#252b49;
+  background:#f27178;
+  box-shadow:0 0 0 7px rgba(242,113,120,.14);
+}
+
+.experience__year { display:none; }
+
+@media(max-width:900px){
+  .experience{padding-top:14rem}
+  .experience__wave{width:150%;left:-35%;height:230px}
+  .experience__list{padding-left:64px}
+  .experience__list:before{left:19px}
+  .experience__item:before{left:-64px;width:48px}
+  .experience__item:after{left:-20px;width:20px}
+}
+
+/* FINAL OVERRIDES — organik teknoloji paneli */
+.stack__heading {
+  top: 0;
+  width: 88vw;
+  margin-left: calc(50% - 44vw);
+  padding: 2rem clamp(2rem, 4vw, 4.5rem) 1rem;
+  border: 0;
+  border-radius: 58px 24px 0 0;
+  color: #ffffff;
+  background: #2188e8;
+}
+
+.stack__heading span:first-child,
+.stack__heading span:last-child {
+  color: #ffffff;
+  text-shadow: none;
+}
+
+.tech-marquee {
+  width: 88vw;
+  min-height: 0;
+  margin: -1px 0 0 calc(50% - 44vw);
+  overflow: hidden;
+  border-radius: 0 0 68px 30px;
+  color: #ffffff;
+  background: #2188e8;
+  box-shadow: 0 24px 54px rgba(22, 63, 92, .16);
+}
+
+.tech-marquee__wave {
+  display: none;
+}
+
+.tech-marquee__track {
+  width: 100%;
+  padding: .65rem clamp(2rem, 4vw, 4.5rem) 2.35rem;
+}
+
+.tech-marquee__item {
+  color: #ffffff;
+}
+
+/* Kaldırılmış Experience dalgasının eski kuralları yeniden devreye girmesin. */
+.experience {
+  margin-top: 0;
+  padding-top: clamp(4.5rem, 8vh, 6.5rem);
+}
+
+.experience__wave {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .stack__heading {
+    width: calc(100vw - 24px);
+    margin-left: calc(50% - 50vw + 12px);
+    padding: 1.25rem 1rem .65rem;
+    border-radius: 28px 16px 0 0;
+    font-size: .56rem;
+    white-space: nowrap;
+  }
+
+  .tech-marquee {
+    width: calc(100vw - 24px);
+    margin: -1px 0 0 calc(50% - 50vw + 12px);
+    border-radius: 0 0 32px 18px;
+    background: #2188e8;
+  }
+
+  .tech-marquee__track {
+    padding: .35rem .75rem 1.35rem;
+  }
+
+  .tech-marquee__group {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .2rem .35rem;
+  }
+
+  .tech-marquee__item i {
+    display: none;
+  }
+
+  .experience {
+    padding-top: 4rem;
+  }
+}

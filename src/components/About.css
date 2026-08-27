@@ -1,0 +1,474 @@
+/* ============================================================
+   ABOUT — Hero/Projects/Experience ile aynı oran sistemi:
+   clamp + vw → laptop = monitör
+   ============================================================ */
+
+.about {
+  position: relative;
+  /* Şeffaf zemin: app__bg'deki sayfa görseli alttan görünür.
+     Okunaklılık perdesi artık tek yerde: App.css */
+  background: transparent;
+  padding: clamp(5rem, 12vh, 9rem) clamp(1.5rem, 11vw, 14rem);
+  scroll-margin-top: 90px;
+  overflow: hidden; /* leke katmanı -3% taşıyor → kırp */
+}
+
+/* RENK LEKELERİ: Projects ile aynı dil, kenarlarda maskeli + sürükleniyor */
+.about::before {
+  content: "";
+  position: absolute;
+  inset: -3%;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(33, 136, 232, 0.12),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 6% 55%,
+      rgba(242, 113, 120, 0.1),
+      transparent 30%
+    ),
+    radial-gradient(circle at 85% 92%, rgba(22, 63, 92, 0.09), transparent 30%);
+  z-index: 0;
+  pointer-events: none;
+  animation: aboutBlobDrift 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes aboutBlobDrift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(1.5%, -1.2%, 0) scale(1.05);
+  }
+}
+
+/* MİNİ NOKTA DESENİ: kenarlarda eriyen maske ile */
+.about::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(22, 63, 92, 0.08) 1.2px,
+    transparent 1.3px
+  );
+  background-size: 26px 26px;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 10%,
+    #000 75%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 10%,
+    #000 75%,
+    transparent 100%
+  );
+}
+
+.about__container {
+  position: relative; /* desen katmanlarının üstünde kal */
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------- SCROLL-REVEAL ---------- */
+
+.about__header,
+.about__intro,
+.stack__heading,
+.stack__column {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.about__header.is-visible,
+.about__intro.is-visible,
+.stack__heading.is-visible,
+.stack__column.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Kolonlar sırayla belirsin */
+.stack__column:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.stack__column:nth-child(3) {
+  transition-delay: 0.24s;
+}
+
+/* ---------- HEADER (diğer bölümlerle aynı dil) ---------- */
+
+.about__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  border-bottom: 1px solid #cbd5df;
+}
+
+.about__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #2188e8;
+}
+
+.about__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2188e8;
+  flex-shrink: 0;
+}
+
+/* ---------- INTRO: başlık + biyografi ---------- */
+
+.about__intro {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: clamp(2rem, 4.5vw, 5.5rem);
+  align-items: start;
+  padding: clamp(3rem, 7vh, 6rem) 0;
+}
+
+.about__title {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 3.4vw, 3.75rem);
+  line-height: 1.2;
+  color: #252b49;
+}
+
+.about__title em {
+  font-style: italic;
+  color: #2188e8;
+}
+
+.about__bio {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.6vh, 1.4rem);
+}
+
+.about__label {
+  font-size: clamp(0.68rem, 0.75vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #163f5c;
+}
+
+.about__bio p {
+  margin: 0;
+  max-width: 56ch;
+  font-size: clamp(0.88rem, 1vw, 1.05rem);
+  line-height: 1.75;
+  color: rgba(37, 43, 73, 0.75);
+}
+
+/* Link — Projects'teki VIEW PROJECT ile aynı reçete */
+.about__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  margin-top: clamp(0.4rem, 0.8vh, 0.8rem);
+  padding-bottom: 5px;
+  font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #2188e8;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.about__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.about__link:hover {
+  color: #163f5c;
+}
+
+.about__link:hover::after {
+  transform: scaleX(1);
+}
+
+.about__link-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.about__link:hover .about__link-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* ---------- TECH STACK ---------- */
+
+.stack__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: clamp(1rem, 2vh, 1.6rem);
+  border-bottom: 1px solid #cbd5df;
+  font-size: clamp(0.68rem, 0.75vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: #252b49;
+}
+
+.stack__heading span:last-child {
+  color: rgba(22, 63, 92, 0.55);
+}
+
+.stack__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.2rem, 2vw, 2rem);
+  padding-top: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+/* Kart: beyaz, yumuşak gölge; hover'da hafif kalkar */
+.stack__column {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 1.6vh, 1.4rem);
+  background: #ffffff;
+  border: 1px solid rgba(203, 213, 223, 0.6);
+  border-radius: 24px;
+  padding: clamp(1.4rem, 2.2vw, 2.2rem);
+  box-shadow: 0 10px 30px rgba(22, 63, 92, 0.06);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease,
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+.stack__column.is-visible:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 48px rgba(22, 63, 92, 0.12);
+  border-color: rgba(33, 136, 232, 0.4);
+}
+
+.stack__column-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+
+.stack__column-header span {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #cbd5df;
+}
+
+.stack__column-header h3 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.3rem, 1.7vw, 1.9rem);
+  line-height: 1.2;
+  color: #252b49;
+}
+
+.stack__items {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Satır: sadece ikon + isim, hover'da maviyle parlar */
+.stack__item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: clamp(0.65rem, 1.2vh, 0.95rem) 0;
+  font-size: clamp(0.85rem, 0.95vw, 1rem);
+  font-weight: 500;
+  color: rgba(37, 43, 73, 0.85);
+  border-top: 1px solid rgba(203, 213, 223, 0.6);
+  transition: color 0.3s ease;
+}
+
+/* Marka logosu — her ekranda aynı oranda (vw), kare kutu içinde */
+.stack__item-icon {
+  width: clamp(16px, 1.2vw, 20px);
+  height: clamp(16px, 1.2vw, 20px);
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.stack__item:hover {
+  color: #2188e8;
+}
+
+/* FEATURED: Backend — koyu lacivert kart, ana güç öne çıkıyor */
+.stack__column--featured {
+  background: linear-gradient(160deg, #163f5c 0%, #252b49 100%);
+  border-color: rgba(33, 136, 232, 0.35);
+  box-shadow: 0 18px 42px rgba(22, 63, 92, 0.22);
+}
+
+.stack__column--featured .stack__column-header span {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.stack__column--featured .stack__column-header h3 {
+  color: #ffffff;
+}
+
+.stack__column--featured .stack__item {
+  color: rgba(255, 255, 255, 0.85);
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.stack__column--featured .stack__item:hover {
+  color: #ffffff;
+}
+
+.stack__column--featured.is-visible:hover {
+  border-color: rgba(33, 136, 232, 0.65);
+  box-shadow: 0 26px 54px rgba(22, 63, 92, 0.3);
+}
+
+/* ---------- MOBİL ---------- */
+
+@media (max-width: 900px) {
+  .about__intro {
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 4vw, 2.25rem);
+    padding: clamp(2.5rem, 6vh, 4rem) 0;
+  }
+
+  /* Mobilde elle satır bölmeyi kaldır, metin doğal aksın */
+  .about__title br {
+    display: none;
+  }
+
+  .stack__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .about__bio p {
+    max-width: none;
+  }
+}
+
+/* ---------- HAREKET AZALTMA TERCİHİ ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .about::before {
+    animation: none;
+  }
+
+  .about__header,
+  .about__intro,
+  .stack__heading,
+  .stack__column {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .stack__column,
+  .stack__item,
+  .about__link,
+  .about__link::after,
+  .about__link-arrow {
+    transition: none;
+  }
+}
+
+/* Projects mavisinin About içinde yatay, asimetrik dalgalarla sonlanması. */
+.about { padding-top: clamp(12rem, 25vh, 17rem); }
+.about__wave { position:absolute;z-index:0;top:-1px;left:0;width:100%;height:clamp(190px,22vw,280px);display:block;pointer-events:none; }
+.about__wave path { fill:#2188e8; }
+@media(max-width:900px){.about{padding-top:11rem}.about__wave{width:150%;left:-25%;height:190px}}
+
+/* Teknoloji başlığı ve içerik bandı tek bir kompozisyon olarak görünür. */
+.stack {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.stack.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stack .stack__heading,
+.stack .tech-marquee {
+  opacity: 1;
+  transform: none;
+}
+
+/* Marka renkleri yerine eşit kontrastlı, okunaklı teknoloji rozetleri. */
+.tech-marquee__item img {
+  box-sizing: content-box;
+  padding: 0.42rem;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.about .tech-marquee__item:hover,
+.about .tech-marquee__item:focus-visible {
+  color: #ffffff;
+  background: #163f5c;
+  border-color: #f27178;
+  box-shadow: 0 12px 28px rgba(22, 63, 92, 0.28);
+}
+
+.about .tech-marquee__item:hover img,
+.about .tech-marquee__item:focus-visible img {
+  border-color: rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stack {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

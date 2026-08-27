@@ -1,0 +1,69 @@
+/* Uniform visual canvas for source logos with different transparent margins. */
+.experience__wordmark,
+.experience__wordmark--dogus,
+.experience__wordmark--divide,
+.experience__wordmark--flalingo {
+  width: 220px;
+  height: 64px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.experience__wordmark {
+  top: 6.5rem;
+}
+
+.experience__meta {
+  padding-top: 6.625rem;
+}
+
+.experience__wordmark img,
+.experience__wordmark--dogus img,
+.experience__wordmark--divide img,
+.experience__wordmark--flalingo img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 205px;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  object-fit: initial;
+  transform: translate(-50%, -50%);
+}
+
+/* Görseller absolute konumlandığı için tetikleyici içerik genişliğini
+   hesaplayamıyordu (mobilde 20px'e düşüp logoyu kırpıyordu). */
+.experience__wordmark .experience__logo-trigger {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .experience__wordmark,
+  .experience__wordmark--dogus,
+  .experience__wordmark--divide,
+  .experience__wordmark--flalingo {
+    width: 190px;
+    height: 58px;
+  }
+
+  .experience__wordmark {
+    top: 4.8rem;
+  }
+
+  .experience__meta {
+    padding-top: 7.25rem;
+  }
+
+  .experience__wordmark img,
+  .experience__wordmark--dogus img,
+  .experience__wordmark--divide img,
+  .experience__wordmark--flalingo img {
+    width: 180px;
+  }
+}

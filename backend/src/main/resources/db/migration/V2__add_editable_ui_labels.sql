@@ -1,0 +1,12 @@
+ALTER TABLE site_settings ADD COLUMN nav_work_label VARCHAR(40) NOT NULL DEFAULT 'WORK';
+ALTER TABLE site_settings ADD COLUMN nav_about_label VARCHAR(40) NOT NULL DEFAULT 'ABOUT';
+ALTER TABLE site_settings ADD COLUMN nav_experience_label VARCHAR(40) NOT NULL DEFAULT 'EXPERIENCE';
+ALTER TABLE site_settings ADD COLUMN nav_contact_label VARCHAR(40) NOT NULL DEFAULT 'CONTACT';
+ALTER TABLE site_settings ADD COLUMN projects_eyebrow VARCHAR(80) NOT NULL DEFAULT 'SELECTED WORK';
+ALTER TABLE site_settings ADD COLUMN projects_title VARCHAR(120) NOT NULL DEFAULT 'Things I''ve';
+ALTER TABLE site_settings ADD COLUMN projects_highlight VARCHAR(80) NOT NULL DEFAULT 'built';
+ALTER TABLE site_settings ADD COLUMN experience_eyebrow VARCHAR(80) NOT NULL DEFAULT 'EXPERIENCE';
+ALTER TABLE site_settings ADD COLUMN experience_title VARCHAR(120) NOT NULL DEFAULT 'Where I''ve';
+ALTER TABLE site_settings ADD COLUMN experience_highlight VARCHAR(80) NOT NULL DEFAULT 'worked';
+ALTER TABLE site_settings ADD COLUMN technology_heading VARCHAR(100) NOT NULL DEFAULT 'WHAT I WORK WITH';
+ALTER TABLE site_settings ADD COLUMN technology_label VARCHAR(100) NOT NULL DEFAULT 'TECH STACK';

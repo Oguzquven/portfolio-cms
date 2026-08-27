@@ -1,0 +1,1 @@
+export async function uploadMedia(file){const body=new FormData();body.append("file",file);const response=await fetch("/api/media",{method:"POST",body});if(!response.ok){const error=await response.json().catch(()=>null);throw new Error(error?.message||`Dosya yüklenemedi (${response.status})`);}return response.json();}

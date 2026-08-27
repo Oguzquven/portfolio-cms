@@ -1,0 +1,1 @@
+package com.oguzguven.portfolio.message;import java.time.Instant;import java.util.UUID;public record ContactMessageResponse(UUID id,String name,String email,String message,Instant createdAt,boolean read){static ContactMessageResponse from(ContactMessage m){return new ContactMessageResponse(m.getId(),m.getName(),m.getEmail(),m.getMessage(),m.getCreatedAt(),m.isRead());}}

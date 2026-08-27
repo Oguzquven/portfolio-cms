@@ -1,0 +1,87 @@
+/* Projects: blue/navy-only interaction language. */
+.projects__eyebrow-dot {
+  background: #8fc9fa;
+}
+
+.mockup__browser > span:first-child {
+  background: #8fc9fa;
+}
+
+.project__number {
+  color: #ffffff;
+  background: #252b49;
+}
+
+.project__title {
+  color: #ffffff;
+  transition:
+    color 320ms ease,
+    transform 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.project__title-link::after {
+  background: #252b49;
+  transition: transform 360ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.project:hover .project__title,
+.project__title-link:hover,
+.project__title-link:focus-visible {
+  color: #252b49;
+}
+
+.project:hover .project__title {
+  transform: translateX(4px);
+}
+
+.project:hover .project__content {
+  border-color: transparent;
+}
+
+.project__visual,
+.project:hover .project__visual,
+.project__visual:focus-visible {
+  border-color: rgba(255, 255, 255, .48);
+  outline: none;
+  box-shadow: 0 22px 48px rgba(22, 63, 92, .24);
+}
+
+.project:hover .project__visual,
+.project__visual:focus-visible {
+  transform: translateY(-5px) scale(1.008);
+}
+
+.project__visual::after,
+.project__visual:hover::after,
+.project__visual:focus-visible::after {
+  color: #ffffff;
+  background: rgba(37, 43, 73, .94);
+  border-color: rgba(255, 255, 255, .7);
+  box-shadow: 0 10px 24px rgba(22, 63, 92, .24);
+}
+
+.project__visual:hover::after,
+.project__visual:focus-visible::after {
+  transform: translateY(-3px);
+}
+
+.project__link:hover,
+.project__link:focus-visible {
+  color: #ffffff;
+  background: #252b49;
+  border-color: #252b49;
+}
+
+.project__link:focus-visible,
+.project__title-link:focus-visible {
+  outline-color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project:hover .project__visual,
+  .project__visual:focus-visible,
+  .project__visual:hover::after,
+  .project__visual:focus-visible::after {
+    transform: none;
+  }
+}

@@ -1,0 +1,3 @@
+package com.oguzguven.portfolio.hero;
+import org.springframework.stereotype.Service;import org.springframework.transaction.annotation.Transactional;
+@Service public class HeroService{private final HeroRepository repository;public HeroService(HeroRepository repository){this.repository=repository;}@Transactional(readOnly=true)public HeroResponse get(){return HeroResponse.from(repository.findById(1L).orElseThrow());}@Transactional public HeroResponse update(HeroRequest request){var hero=repository.findById(1L).orElseGet(()->new Hero(request));hero.update(request);return HeroResponse.from(repository.save(hero));}}

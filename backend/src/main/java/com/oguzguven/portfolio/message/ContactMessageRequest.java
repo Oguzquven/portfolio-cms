@@ -1,0 +1,1 @@
+package com.oguzguven.portfolio.message;import jakarta.validation.constraints.*;public record ContactMessageRequest(@NotBlank @Size(max=120) String name,@NotBlank @Email @Size(max=200) String email,@NotBlank @Size(max=3000) String message){}

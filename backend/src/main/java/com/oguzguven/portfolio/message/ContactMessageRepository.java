@@ -1,0 +1,1 @@
+package com.oguzguven.portfolio.message;import java.util.*;import org.springframework.data.jpa.repository.JpaRepository;public interface ContactMessageRepository extends JpaRepository<ContactMessage,UUID>{List<ContactMessage> findAllByOrderByCreatedAtDesc();}

@@ -1,0 +1,458 @@
+/* ============================================================
+   EXPERIENCE — Dikey timeline + akordeon.
+   Hero/Projects ile aynı oran sistemi: clamp + vw → laptop = monitör
+   ============================================================ */
+
+.experience {
+  position: relative;
+  /* Projects'in #f7fbff'inden beyaza yumuşak geçiş: bıçak gibi sınır yok */
+  background: linear-gradient(180deg, #f7fbff 0%, #ffffff 260px);
+  padding: clamp(5rem, 12vh, 9rem) clamp(1.5rem, 11vw, 14rem);
+  scroll-margin-top: 90px;
+  overflow: hidden; /* ::before -3% taşıyor → yatay scroll'u burada kırp */
+}
+
+/* Yumuşak renk lekeleri (Projects'tekinin hafif tonu).
+   blobDrift: lekeler 24 saniyede nefes alır gibi sürüklenir
+   (hero'daki Ken Burns'ün kardeşi) */
+.experience::before {
+  content: "";
+  position: absolute;
+  inset: -3%; /* kayma payı: sürüklenirken kenarlar boşalmasın */
+  background:
+    radial-gradient(circle at 8% 8%, rgba(33, 136, 232, 0.09), transparent 30%),
+    radial-gradient(
+      circle at 92% 90%,
+      rgba(242, 113, 120, 0.09),
+      transparent 32%
+    );
+  z-index: 0;
+  pointer-events: none;
+  animation: blobDrift 24s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes blobDrift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-1.5%, 1.2%, 0) scale(1.05);
+  }
+}
+
+.experience__container {
+  position: relative; /* lekelerin üstünde kal */
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------- SCROLL-REVEAL ---------- */
+
+.experience__header,
+.experience__item {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.experience__header.is-visible,
+.experience__item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- BAŞLIK ALANI (Projects ile aynı dil) ---------- */
+
+.experience__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  border-bottom: 1px solid #cbd5df;
+}
+
+.experience__heading {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.4vh, 1.1rem);
+  min-width: 0;
+}
+
+.experience__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #2188e8;
+}
+
+.experience__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2188e8;
+  flex-shrink: 0;
+}
+
+.experience__title {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 3.4vw, 3.75rem);
+  line-height: 1.15;
+  color: #252b49;
+}
+
+.experience__title em {
+  font-style: italic;
+  color: #2188e8;
+}
+
+/* ---------- TIMELINE ÇİZGİSİ ----------
+   Listenin ::before'u = dikey çizgi. "is-visible" basılınca
+   scaleY 0→1 ile yukarıdan aşağı "çizilir" */
+
+.experience__list {
+  position: relative;
+  /* Satır dikey nefes payı — tek yerden yönetilir:
+     padding, nokta hizası ve çizgi uçları bunu takip eder */
+  --item-pad-y: clamp(1.9rem, 4.2vh, 3.4rem);
+}
+
+.experience__list::before {
+  content: "";
+  position: absolute;
+  left: 7px; /* çizgi merkezi: 8px */
+  top: var(--item-pad-y);
+  bottom: var(--item-pad-y);
+  width: 2px;
+  background: linear-gradient(180deg, #2188e8, #cbd5df);
+  border-radius: 2px;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.4s ease 0.3s;
+}
+
+.experience__list.is-visible::before {
+  transform: scaleY(1);
+}
+
+/* ---------- TIMELINE ÖĞELERİ ---------- */
+
+.experience__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  align-items: start;
+  padding: var(--item-pad-y) 0 var(--item-pad-y) clamp(2.5rem, 4vw, 4rem);
+}
+
+/* Nokta: çizginin üstünde, her öğenin başında.
+   Önce scale(0), is-visible ile "pop" yapar */
+.experience__item::before {
+  content: "";
+  position: absolute;
+  left: 1px; /* merkez 8px = çizgi merkezi */
+  top: calc(var(--item-pad-y) + 4px);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #2188e8;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(33, 136, 232, 0.35);
+  transform: scale(0);
+  transition:
+    transform 0.4s ease 0.35s,
+    box-shadow 0.3s ease;
+  z-index: 1;
+}
+
+.experience__item.is-visible::before {
+  transform: scale(1);
+}
+
+.experience__item:hover::before {
+  box-shadow:
+    0 0 0 2px rgba(33, 136, 232, 0.35),
+    0 0 0 9px rgba(33, 136, 232, 0.12);
+}
+
+/* Görünmez tetik — tüm satırı kaplar, tıklamayı o yakalar */
+.experience__trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.experience__trigger:focus-visible {
+  outline: 2px solid #2188e8;
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+/* ---------- SOL: NUMARA + LOGO + ŞİRKET ---------- */
+
+.experience__meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.experience__number {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #cbd5df;
+}
+
+.experience__company-row {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.7rem, 1vw, 1rem);
+  min-width: 0;
+}
+
+.experience__logo {
+  width: clamp(18px, 1.4vw, 24px);
+  height: clamp(18px, 1.4vw, 24px);
+  object-fit: contain;
+  background: #ffffff;
+  border: 1px solid #cbd5df;
+  border-radius: 999px;
+  padding: clamp(6px, 0.55vw, 9px);
+  box-sizing: content-box;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(22, 63, 92, 0.08);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.experience__item:hover .experience__logo {
+  transform: translateY(-3px);
+  border-color: rgba(33, 136, 232, 0.4);
+  box-shadow: 0 8px 18px rgba(22, 63, 92, 0.14);
+}
+
+.experience__company {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.5rem, 2.1vw, 2.4rem);
+  line-height: 1.2;
+  color: #252b49;
+  transition: color 0.3s ease;
+}
+
+.experience__item:hover .experience__company,
+.experience__item--open .experience__company {
+  color: #2188e8;
+}
+
+/* ---------- SAĞ: ROL + YIL + CHEVRON ---------- */
+
+.experience__body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.experience__role-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.experience__role {
+  margin: 0;
+  font-size: clamp(0.98rem, 1.15vw, 1.2rem);
+  font-weight: 600;
+  color: #252b49;
+}
+
+.experience__role-side {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.7rem, 1vw, 1.1rem);
+}
+
+/* Yıl chip'i — Projects'teki kategori chip'inin aynası */
+.experience__year {
+  font-size: clamp(0.68rem, 0.75vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #2188e8;
+  background: rgba(33, 136, 232, 0.08);
+  border: 1px solid rgba(33, 136, 232, 0.25);
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+  white-space: nowrap;
+}
+
+/* Chevron: kapalıyken aşağı bakar, açıkken 180° döner */
+.experience__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(28px, 2.2vw, 36px);
+  height: clamp(28px, 2.2vw, 36px);
+  border-radius: 50%;
+  border: 1px solid #cbd5df;
+  background: #f7fbff;
+  color: #2188e8;
+  transition:
+    transform 0.4s ease,
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.experience__chevron svg {
+  width: 55%;
+  height: 55%;
+}
+
+.experience__item:hover .experience__chevron {
+  border-color: rgba(33, 136, 232, 0.4);
+}
+
+.experience__item--open .experience__chevron {
+  transform: rotate(180deg);
+  background: #2188e8;
+  border-color: #2188e8;
+  color: #ffffff;
+}
+
+/* ---------- AKORDEON GÖVDESİ ----------
+   grid-template-rows: 0fr → 1fr numarası:
+   JS ile yükseklik ölçmeden pürüzsüz açılır/kapanır */
+
+.experience__details {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s ease;
+}
+
+.experience__item--open .experience__details {
+  grid-template-rows: 1fr;
+}
+
+.experience__details-inner {
+  overflow: hidden;
+  min-height: 0; /* 0fr numarasının çalışması için şart */
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 1.2vh, 1.1rem);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.4s ease 0.1s,
+    transform 0.4s ease 0.1s;
+}
+
+.experience__item--open .experience__details-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.experience__description {
+  margin: 0;
+  padding-top: clamp(0.8rem, 1.2vh, 1.1rem);
+  max-width: 60ch;
+  font-size: clamp(0.88rem, 1vw, 1.05rem);
+  line-height: 1.75;
+  color: rgba(37, 43, 73, 0.75);
+}
+
+/* Etiketler — Projects'teki tech chip'leriyle aynı reçete */
+.experience__technologies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.experience__tag {
+  font-size: clamp(0.68rem, 0.78vw, 0.8rem);
+  font-weight: 500;
+  color: #163f5c;
+  background: #f3f5f7;
+  border: 1px solid #cbd5df;
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+  white-space: nowrap;
+}
+
+/* ---------- MOBİL ---------- */
+
+@media (max-width: 900px) {
+  .experience__item {
+    grid-template-columns: 1fr;
+    gap: clamp(0.9rem, 2.5vw, 1.4rem);
+    padding-left: clamp(2rem, 8vw, 2.75rem);
+  }
+
+  .experience__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .experience__description {
+    max-width: none;
+  }
+}
+
+/* ---------- HAREKET AZALTMA TERCİHİ ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .experience::before {
+    animation: none;
+  }
+
+  .experience__header,
+  .experience__item {
+    opacity: 1;
+    transform: none;
+  }
+
+  .experience__list::before {
+    transform: scaleY(1);
+  }
+
+  .experience__item::before {
+    transform: scale(1);
+  }
+
+  .experience__details-inner {
+    opacity: 1;
+    transform: none;
+  }
+
+  .experience__header,
+  .experience__item,
+  .experience__list::before,
+  .experience__item::before,
+  .experience__company,
+  .experience__logo,
+  .experience__chevron,
+  .experience__details,
+  .experience__details-inner {
+    transition: none;
+  }
+}

@@ -1,0 +1,550 @@
+/* ========== YERLEŞİM + ARKA PLAN ========== */
+/*
+  - hero-bg.png (yazılım temalı, palet renklerinde) TÜM hero'yu kaplar
+    ve NAVBAR'IN ARKASINDAN devam eder
+    (margin-top: -80px + padding-top: 80px → navbar ile bütün görünüm).
+  - Görsel ::before katmanında sabit ve hareketsiz durur.
+  - Beyaz perde ::after katmanında → yazılar her zaman okunaklı.
+    Üstte ek dikey geçiş var: navbar linkleri koyu desenin
+    üstüne denk gelse bile okunur.
+  - Katman sırası: görsel (::before, z:0) → perde (::after, z:1)
+    → içerik + fotoğraf (z:2).
+  - Yan boşluklar 11vw ile ORANTILI: laptop (%150) ve monitör (%100)
+    birebir aynı kompozisyonda görünür; istatistik kartı her
+    genişlikte tek satır sığar.
+*/
+.hero {
+  position: relative;
+
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr; /* sol sütuna geniş pay: kart sığsın */
+  align-items: center;
+  gap: clamp(1.5rem, 3.5vw, 4rem);
+
+  width: 100%;
+
+  /* Navbar arkasına taşma artık Hero + Projects ortak taşıyıcısında yönetilir. */
+  margin: 0 auto;
+
+  /* 80px üst pay: içerik navbar'ın altında kalmaz, konumu aynı kalır.
+     Yan boşluk: 11vw → her ekranda aynı oran (navbar ile aynı formül) */
+  padding: 80px clamp(1.5rem, 11vw, 14rem) 0;
+
+  height: 100vh; /* navbar'ı da kapsayan tam ekran */
+  min-height: 720px;
+
+  background: transparent;
+
+  overflow: hidden;
+}
+
+/* Orijinal Hero artwork'ü aynen korunur; alt kenarı ortak birleşik görsele
+   yumuşakça karışır, böylece section sınırında çizgi oluşmaz. */
+.hero::before {
+  content: none;
+}
+
+/* Navbar perdesi + soldan sağa içerik okunabilirlik perdesi. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.92) 0%,
+      rgba(255, 255, 255, 0.55) 80px,
+      rgba(255, 255, 255, 0) 170px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.6) 45%,
+      rgba(255, 255, 255, 0.18) 75%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+}
+
+/* ========== SOL: METİN ========== */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: clamp(0.7rem, 0.85vw, 0.85rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #2188e8; /* palet: Primary */
+}
+
+.hero__eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2188e8; /* palet: Primary */
+}
+
+.hero__title {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.4rem, 4.2vw, 5rem);
+  font-weight: 500;
+  line-height: 1.12;
+  color: #252b49; /* palet: Dark */
+  margin: clamp(0.8rem, 2vh, 1.4rem) 0 clamp(0.9rem, 2.5vh, 1.6rem);
+
+  /* em bazlı sınır: fontla birlikte orantılı ölçeklenir →
+     başlık HER ekranda 3 satır kalır (scalable / systems / interfaces) */
+  max-width: 9em;
+}
+
+/* vurgulu kelime: italik + mavi */
+.hero__title em {
+  color: #2188e8; /* palet: Primary */
+}
+
+.hero__description {
+  color: #163f5c; /* palet: Dark-Secondary */
+  line-height: 1.75;
+  max-width: 470px;
+  font-size: clamp(0.95rem, 1.05vw, 1.25rem);
+  margin: 0 0 clamp(1.2rem, 3vh, 2.2rem);
+}
+
+/* ========== BUTONLAR ========== */
+.hero__actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 4.5vh, 3.2rem);
+}
+
+.hero__primary,
+.hero__secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.7rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.hero__primary {
+  background: #252b49; /* palet: Dark */
+  color: #ffffff;
+}
+
+.hero__secondary {
+  border: 1px solid #cbd5df; /* palet: Light */
+  color: #252b49; /* palet: Dark */
+  background: #ffffff;
+}
+
+.hero__primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(37, 43, 73, 0.3); /* palet: Dark tonu */
+}
+
+.hero__secondary:hover {
+  transform: translateY(-2px);
+  border-color: #163f5c; /* palet: Dark-Secondary */
+}
+
+/* ========== İSTATİSTİK KARTI (CAM + HOVER) ========== */
+/*
+  Yarı şeffaf beyaz + backdrop blur → arka plan deseni kartın
+  içinden BULANIK görünür. Öğeler arasında ince dikey ayraçlar var.
+  Kendi kendine HAREKET ETMEZ; fare üstüne gelince hafifçe kalkar.
+  HER GENİŞLİKTE TEK SATIR: iç ölçüler vw oranlı, laptop = monitör.
+*/
+.hero__stats {
+  display: flex;
+  flex-wrap: nowrap; /* asla ikinci satıra düşme */
+
+  width: fit-content;
+
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 18px;
+  padding: 1.15rem clamp(1rem, 1.8vw, 2rem);
+
+  box-shadow: 0 16px 40px rgba(37, 43, 73, 0.1); /* palet: Dark tonunda gölge */
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.hero__stats:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 55px rgba(37, 43, 73, 0.16);
+  border-color: rgba(33, 136, 232, 0.4); /* palet: Primary tonunda kenar */
+}
+
+.hero__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.15rem;
+
+  padding: 0 clamp(0.7rem, 1.2vw, 1.6rem);
+}
+
+.hero__stat:first-child {
+  padding-left: 0;
+}
+
+.hero__stat:last-child {
+  padding-right: 0;
+}
+
+/* öğeler arası ince ayraç */
+.hero__stat + .hero__stat {
+  border-left: 1px solid #cbd5df; /* palet: Light */
+}
+
+.hero__stat svg {
+  width: clamp(18px, 1.3vw, 22px);
+  height: clamp(18px, 1.3vw, 22px);
+  color: #2188e8; /* palet: Primary */
+  margin-bottom: 0.4rem;
+}
+
+.hero__stat-value {
+  font-size: clamp(0.9rem, 1.05vw, 1.1rem);
+  font-weight: 600;
+  color: #252b49; /* palet: Dark */
+  white-space: nowrap;
+}
+
+.hero__stat-label {
+  font-size: clamp(0.68rem, 0.78vw, 0.78rem);
+  color: #163f5c; /* palet: Dark-Secondary */
+  white-space: nowrap;
+}
+
+/* ========== SAĞ: KARE ÇERÇEVELİ GÖRSEL ========== */
+/*
+  Fotoğraf kare çerçevenin içinde TAMAMEN görünür (object-fit: contain).
+  Çerçevenin etrafında PALET RENKLERİYLE dönen degrade halka (::after).
+  Halkanın 4 tarafı da görünür; yüzen kart halkanın altında, onu örtmüyor.
+*/
+.hero__media {
+  position: relative;
+  height: calc(100% - 80px); /* üstteki navbar payını düş */
+  min-width: 0;
+  z-index: 2; /* perdenin üstünde kal */
+
+  display: flex;
+  justify-content: flex-end; /* sağ kenara yasla */
+  align-items: center; /* dikeyde ortala */
+}
+
+/* süzülen nokta deseni (çerçevenin arkası, sağ üst) */
+.hero__media::before {
+  content: "";
+  position: absolute;
+  top: clamp(1rem, 6vh, 4rem);
+  right: 4%;
+  z-index: 0;
+
+  width: 200px;
+  height: 160px;
+
+  background-image: radial-gradient(
+    #cbd5df 2px,
+    transparent 2px
+  ); /* palet: Light */
+  background-size: 18px 18px;
+
+  animation: dotsDrift 9s ease-in-out infinite alternate;
+}
+
+@keyframes dotsDrift {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(14px);
+  }
+}
+
+/* dönen degrade halka — PALET RENKLERİ (dışına çıkma yok) */
+@property --frame-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.hero__media::after {
+  content: "";
+  position: absolute;
+  right: -12px;
+  bottom: calc(50% - (clamp(320px, 26vw, 500px) / 2) - 12px);
+  z-index: 0;
+
+  width: calc(clamp(320px, 26vw, 500px) + 24px);
+  aspect-ratio: 1;
+
+  border-radius: 40px;
+  background: conic-gradient(
+    from var(--frame-angle),
+    #163f5c,
+    #2188e8,
+    #8fc9fa,
+    #cbd5df,
+    #2188e8,
+    #163f5c,
+    #2188e8
+  );
+
+  box-shadow: 0 18px 44px rgba(22, 63, 92, 0.18);
+
+  animation: frameSpin 8s linear infinite;
+}
+
+@keyframes frameSpin {
+  to {
+    --frame-angle: 360deg;
+  }
+}
+
+.hero__photo {
+  position: relative;
+  z-index: 1;
+
+  width: clamp(320px, 26vw, 500px);
+  aspect-ratio: 1; /* KARE */
+  object-fit: contain; /* KIRPMA YOK — görsel tamamen görünür */
+  object-position: center bottom; /* çerçevenin tabanına oturur */
+
+  border-radius: 32px;
+  background: linear-gradient(
+    160deg,
+    #f7fbff 0%,
+    #f3f5f7 100%
+  ); /* palet: Extra Light → Light-Secondary */
+
+  box-shadow: 0 24px 60px rgba(33, 136, 232, 0.16); /* palet: Primary tonunda gölge */
+
+  display: block;
+}
+
+/* ========== YÜZEN KART (CAM + HOVER) ========== */
+/* Çerçevenin ALTINDA → dönen halka dört yandan tamamen görünür.
+   İstatistik kartıyla aynı cam efekti ve aynı hover tepkisi. */
+.hero__card {
+  position: absolute;
+  right: 0;
+  bottom: clamp(16px, 3.5vh, 40px);
+  z-index: 3;
+
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 14px;
+  padding: 1.1rem 1.3rem;
+
+  box-shadow: 0 18px 45px rgba(37, 43, 73, 0.14); /* palet: Dark tonunda gölge */
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.hero__card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 26px 55px rgba(37, 43, 73, 0.2);
+  border-color: rgba(33, 136, 232, 0.4); /* palet: Primary tonunda kenar */
+}
+
+.hero__card-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.hero__card-divider {
+  height: 1px;
+  background: #cbd5df; /* palet: Light */
+  margin: 0.8rem 0;
+}
+
+.hero__card-label {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #2188e8; /* palet: Primary */
+}
+
+.hero__card-value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #252b49; /* palet: Dark */
+}
+
+.hero__card-value svg {
+  width: 16px;
+  height: 16px;
+  color: #163f5c; /* palet: Dark-Secondary */
+}
+
+.hero__card-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.hero__card-dot--blue {
+  background: #2188e8; /* palet: Primary */
+}
+
+.hero__card-dot--green {
+  background: #22c55e;
+}
+
+/* ========== MOBİL ========== */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 0;
+    padding: 80px 1.5rem 4rem; /* üstte navbar payı korunur */
+    text-align: left;
+  }
+
+  /* istatistik kartı SADECE mobilde 2x2 grid (tek satır buraya sığmaz) */
+  .hero__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem 1.2rem;
+    width: 100%;
+    padding: 1.2rem 1.3rem;
+  }
+
+  .hero__stat {
+    padding: 0;
+  }
+
+  .hero__stat + .hero__stat {
+    border-left: none;
+  }
+
+  .hero__media {
+    order: -1;
+    height: auto;
+    justify-content: center; /* mobilde ortala */
+
+    /* yüzen kart çerçevenin altına sarkıyor →
+       başlıkla çakışmasın diye alt boşluk */
+    margin-bottom: 3.25rem;
+  }
+
+  .hero__photo {
+    width: min(300px, 78vw);
+    border-radius: 24px;
+  }
+
+  .hero__media::after {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: -12px;
+
+    width: calc(min(300px, 78vw) + 24px);
+    border-radius: 32px;
+  }
+
+  /* mobilde kart KOMPAKT + çerçevenin sağ alt köşesinde:
+     yüzü örtmez, masaüstüyle aynı kompozisyon dili */
+  .hero__card {
+    right: -6px;
+    bottom: -40px;
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+  }
+
+  .hero__card-row {
+    gap: 0.2rem;
+  }
+
+  .hero__card-divider {
+    margin: 0.55rem 0;
+  }
+
+  .hero__card-label {
+    font-size: 0.62rem;
+  }
+
+  .hero__card-value {
+    font-size: 0.85rem;
+    gap: 0.9rem;
+  }
+
+  .hero__card-value svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ========== KÜÇÜK MOBİL: navbar 72px olunca hero payı da 72px ========== */
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 72px;
+  }
+
+  .hero__actions {
+    gap: .75rem;
+  }
+
+  .hero__primary,
+  .hero__secondary {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: .9rem .65rem;
+    font-size: .7rem;
+  }
+}
+
+/* Akışkan pastel yüzeyi görünür bırak; soldaki metni koruyan hafif perde. */
+.hero::after {
+  background: linear-gradient(
+    90deg,
+    rgba(247, 251, 255, 0.96) 0%,
+    rgba(247, 251, 255, 0.82) 42%,
+    rgba(247, 251, 255, 0.2) 68%,
+    transparent 100%
+  );
+}
+/* Hero üzerindeki beyaz soluklaştırma kaldırıldı; SVG dalga doğal renkleriyle görünür. */
+.hero::after {
+  content: none;
+}

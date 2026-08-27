@@ -1,0 +1,271 @@
+/* ---------- NAVBAR ---------- */
+/*
+  HERO İLE TAM BÜTÜN GÖRÜNÜM:
+  - Sayfa en üstteyken navbar TAMAMEN ŞEFFAF → hero-bg.png kesintisiz
+    devam eder, navbar ile hero arasında hiçbir ayırım/ton farkı yok.
+  - Kullanıcı kaydırınca (Navbar.jsx "navbar--scrolled" sınıfını ekler)
+    cam efekti + hafif gölge gelir → içerik altından geçerken okunaklı kalır.
+  - border-bottom YOK → hero ile arasında çizgi/ayırım yok.
+  - Yan boşluklar hero ile BİREBİR AYNI formülde (11vw) →
+    logo hero başlığıyla, menü fotoğraf çerçevesiyle aynı hizada;
+    laptop ve monitörde boşluk oranı aynı.
+*/
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  background: transparent; /* üstte: hero ile birebir bütün */
+
+  transition:
+    background 250ms ease,
+    box-shadow 250ms ease;
+}
+
+/* kaydırıldıktan sonraki cam görünüm */
+.navbar--scrolled {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(37, 43, 73, 0.08); /* palet: Dark tonunda gölge */
+}
+
+.navbar__inner {
+  width: 100%;
+  margin: 0 auto;
+
+  /* hero ile birebir aynı yatay hiza: orantılı yan boşluk */
+  padding: 0 clamp(1.5rem, 11vw, 14rem);
+
+  height: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-decoration: none;
+}
+
+.navbar__logo img {
+  height: 40px;
+  width: auto;
+  display: block;
+}
+
+.logo-name {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: #252b49; /* palet: Dark */
+  text-transform: uppercase;
+}
+
+.navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.navbar__menu a {
+  position: relative;
+
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #252b49; /* palet: Dark */
+  text-decoration: none;
+
+  transition: color 180ms ease;
+}
+
+.navbar__menu a:hover {
+  color: #2188e8; /* palet: Primary */
+}
+
+.navbar__menu a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+
+  width: 0;
+  height: 2px;
+
+  background: #2188e8; /* palet: Primary */
+
+  transition: width 180ms ease;
+}
+
+.navbar__menu a:hover::after {
+  width: 100%;
+}
+
+/* CTA (CV) butonu */
+.navbar__menu a.navbar__cta {
+  padding: 10px 22px;
+
+  color: #ffffff;
+  background: #2188e8; /* palet: Primary */
+  border-radius: 999px;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.navbar__menu a.navbar__cta:hover {
+  background: #163f5c; /* palet: Dark-Secondary */
+  transform: translateY(-1px);
+}
+
+.navbar__menu a.navbar__cta::after {
+  content: none;
+}
+
+.navbar__language {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 76px;
+  height: 38px;
+  padding: 3px;
+  border: 1px solid rgba(37, 43, 73, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.navbar__language > span:not(.navbar__language-indicator) {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 30px;
+  color: #252b49;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  transition: color 240ms ease;
+}
+
+.navbar__language > span.is-active {
+  color: #fff;
+}
+
+.navbar__language-indicator {
+  position: absolute;
+  z-index: 0;
+  top: 3px;
+  left: 3px;
+  width: 34px;
+  height: 30px;
+  border-radius: 999px;
+  background: #2188e8;
+  box-shadow: 0 4px 12px rgba(33, 136, 232, .24);
+  transform: translateX(0);
+  transition: transform 280ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.navbar__language--tr .navbar__language-indicator {
+  transform: translateX(34px);
+}
+
+.navbar__language:focus-visible {
+  outline: 2px solid #2188e8;
+  outline-offset: 3px;
+}
+
+
+/* Hamburger */
+.navbar__toggle {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 8px;
+  background: none;
+  border: none;
+  outline: none; /* global button stillerinden gelen çerçeveyi kes */
+  cursor: pointer;
+}
+
+/* klavye ile gezenler için palete uygun focus halkası */
+.navbar__toggle:focus-visible {
+  outline: 2px solid #2188e8; /* palet: Primary */
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.navbar__toggle span {
+  width: 24px;
+  height: 2px;
+  background: #252b49; /* palet: Dark */
+  transition: transform 200ms ease;
+}
+
+.navbar__toggle.is-open span:first-child {
+  transform: translateY(4px) rotate(45deg);
+}
+
+.navbar__toggle.is-open span:last-child {
+  transform: translateY(-4px) rotate(-45deg);
+}
+
+/* Mobil */
+@media (max-width: 768px) {
+  .navbar__inner {
+    padding: 0 1.5rem;
+    height: 72px;
+  }
+
+  /* mobil menü açıkken navbar beyaz olsun ki şeffaf zeminde karışmasın */
+  .navbar--menu-open {
+    background: #ffffff;
+    box-shadow: 0 8px 30px rgba(37, 43, 73, 0.08);
+  }
+
+  .navbar__toggle {
+    display: flex;
+  }
+
+  .navbar__menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+
+    padding: 24px 24px 32px;
+
+    background: #ffffff;
+    border-bottom: 1px solid #f3f5f7; /* palet: Light-Secondary */
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition:
+      opacity 200ms ease,
+      transform 200ms ease;
+  }
+
+  .navbar__language { align-self: flex-start; }
+
+
+  .navbar__menu.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}

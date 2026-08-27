@@ -1,0 +1,2 @@
+package com.oguzguven.portfolio.hero;import jakarta.validation.Valid;import org.springframework.web.bind.annotation.*;
+@RestController @RequestMapping("/api/hero") public class HeroController{private final HeroService service;public HeroController(HeroService service){this.service=service;}@GetMapping public HeroResponse get(){return service.get();}@PutMapping public HeroResponse update(@Valid @RequestBody HeroRequest request){return service.update(request);}}

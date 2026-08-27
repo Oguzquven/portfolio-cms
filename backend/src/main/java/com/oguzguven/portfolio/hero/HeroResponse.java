@@ -1,0 +1,4 @@
+package com.oguzguven.portfolio.hero;
+public record HeroResponse(String eyebrow,String titlePrefix,String titleHighlight,String titleSuffix,String description,String primaryText,String primaryUrl,String secondaryText,String secondaryUrl,String location,String availabilityLabel,String availabilityText,String photoUrl,String stat1Value,String stat1Label,String stat2Value,String stat2Label,String stat3Value,String stat3Label,String stat4Value,String stat4Label){
+ static HeroResponse from(Hero h){return new HeroResponse(h.getEyebrow(),h.getTitlePrefix(),h.getTitleHighlight(),h.getTitleSuffix(),h.getDescription(),h.getPrimaryText(),h.getPrimaryUrl(),h.getSecondaryText(),h.getSecondaryUrl(),h.getLocation(),h.getAvailabilityLabel(),h.getAvailabilityText(),h.getPhotoUrl(),h.getStat1Value(),h.getStat1Label(),h.getStat2Value(),h.getStat2Label(),h.getStat3Value(),h.getStat3Label(),h.getStat4Value(),h.getStat4Label());}
+}

@@ -1,0 +1,54 @@
+/* About and Tech Stack: remove coral accents. */
+.about__link {
+  transition:
+    color 280ms ease,
+    background-color 320ms ease,
+    border-color 320ms ease,
+    box-shadow 320ms ease,
+    transform 320ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.about__link:hover,
+.about__link:focus-visible {
+  color: #ffffff;
+  background: #252b49;
+  border-color: #252b49;
+  box-shadow: 0 14px 30px rgba(22, 63, 92, .22);
+  transform: translateY(-3px);
+}
+
+.tech-marquee__item i {
+  display: none;
+}
+
+.about .tech-marquee__item img {
+  background: #ffffff;
+  border-color: rgba(37, 43, 73, .12);
+  box-shadow: 0 5px 14px rgba(22, 63, 92, .14);
+}
+
+.about .tech-marquee__item:hover,
+.about .tech-marquee__item:focus-visible {
+  color: #ffffff;
+  background: #163f5c;
+  border-color: rgba(255, 255, 255, .48);
+  box-shadow: 0 12px 28px rgba(22, 63, 92, .28);
+}
+
+.about .tech-marquee__item:hover img,
+.about .tech-marquee__item:focus-visible img {
+  border-color: rgba(37, 43, 73, .2);
+  background: #ffffff;
+  box-shadow: 0 7px 18px rgba(22, 63, 92, .2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__link {
+    transition-duration: .01ms;
+  }
+
+  .about__link:hover,
+  .about__link:focus-visible {
+    transform: none;
+  }
+}

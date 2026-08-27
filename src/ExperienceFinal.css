@@ -1,0 +1,385 @@
+/* Final Experience surface: one timeline panel, no section color seam. */
+.about,
+.experience {
+  background: #ffffff !important;
+}
+
+.experience {
+  box-shadow: none !important;
+}
+
+.experience__list {
+  align-items: start;
+  padding: 0 clamp(1rem,2.2vw,2.25rem) clamp(1rem,2vw,2rem);
+  border: 1px solid rgba(203,213,223,.42);
+  border-radius: 34px;
+  background: rgba(247,251,255,.64);
+  box-shadow: 0 20px 46px rgba(22,63,92,.08), inset 0 1px 0 rgba(255,255,255,.92);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+.experience__list::before {
+  left: 5%;
+  right: 5%;
+}
+
+.experience__item,
+.experience__item + .experience__item {
+  min-height: 0;
+  padding-inline: clamp(.5rem,1.25vw,1.25rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.experience__item:hover,
+.experience__item--open {
+  border: 0;
+  border-radius: 22px;
+  background: rgba(255,255,255,.42);
+  box-shadow: none;
+}
+
+@media (max-width: 900px) {
+  .experience__list {
+    padding: 0 1rem 0 54px;
+    border-radius: 24px;
+  }
+
+  .experience__list::before {
+    left: 22px;
+    right: auto;
+  }
+
+  .experience__item,
+  .experience__item + .experience__item {
+    margin-top: 0;
+    border: 0;
+  }
+
+  .experience__item + .experience__item {
+    border-top: 1px solid rgba(22,63,92,.1);
+  }
+}
+
+/* Original Doğuş Teknoloji and Flalingo brand assets. */
+.experience__wordmark--dogus,
+.experience__wordmark--flalingo {
+  color: inherit;
+  font-size: inherit;
+  letter-spacing: normal;
+}
+
+.experience__wordmark--dogus img {
+  display: block;
+  width: clamp(185px, 14vw, 235px);
+  height: auto;
+  object-fit: contain;
+}
+
+.experience__wordmark--flalingo img {
+  display: block;
+  width: clamp(135px, 10vw, 175px);
+  height: 54px;
+  object-fit: contain;
+}
+
+.experience__wordmark--dogus > span,
+.experience__wordmark--flalingo > span {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .experience__wordmark--dogus img {
+    width: 190px;
+  }
+
+  .experience__wordmark--flalingo img {
+    width: 145px;
+    height: 48px;
+  }
+}
+
+/* Dividesoft wordmark refinement: layered D + brand tagline. */
+.experience__wordmark--divide {
+  position: absolute;
+  align-items: center;
+  gap: .25rem;
+  padding: 0 0 .72rem .45rem;
+  color: #20232b;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  letter-spacing: -.065em;
+  line-height: .9;
+}
+
+.experience__wordmark--divide i {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  color: #20232b;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: -2px 0 #ffffff, -4px 0 #23a9dd, -6px 0 #ffffff, -8px 0 #23a9dd;
+}
+
+.experience__wordmark--divide i::before {
+  content: "D";
+  position: absolute;
+  left: -5px;
+  top: 0;
+  z-index: -1;
+  color: transparent;
+  -webkit-text-stroke: 1px #23a9dd;
+}
+
+.experience__wordmark--divide > span {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.experience__wordmark--divide::after {
+  content: "the only limit is your imagination";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: #20232b;
+  font-size: .29em;
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Real Dividesoft brand asset and more breathing room below the date. */
+.experience__wordmark {
+  top: 5.75rem;
+}
+
+.experience__meta {
+  padding-top: 5.25rem;
+}
+
+.experience__wordmark--divide {
+  padding: 0;
+}
+
+.experience__wordmark--divide::after,
+.experience__wordmark--divide i,
+.experience__wordmark--divide > span {
+  display: none;
+}
+
+.experience__wordmark--divide img {
+  display: block;
+  width: clamp(150px, 12vw, 205px);
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .experience__wordmark {
+    top: 4.2rem;
+  }
+
+  .experience__meta {
+    padding-top: 4.5rem;
+  }
+
+  .experience__wordmark--divide img {
+    width: 155px;
+  }
+}
+
+/* Company wordmarks replace detached icon + generic company heading. */
+.experience__logo { display: none; }
+
+.experience__company-row {
+  padding-top: 0;
+}
+
+.experience__wordmark {
+  position: absolute;
+  top: 4.8rem;
+  left: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  width: max-content;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.experience__wordmark--dogus {
+  color: #0758c9;
+  font-size: clamp(1.2rem,1.55vw,1.65rem);
+  font-weight: 700;
+  letter-spacing: -.045em;
+}
+
+.experience__wordmark--dogus img {
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.experience__wordmark--divide {
+  color: #171a23;
+  font-size: clamp(1.3rem,1.7vw,1.8rem);
+  font-weight: 750;
+  letter-spacing: -.055em;
+  text-transform: lowercase;
+}
+
+.experience__wordmark--divide i {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 3px double #171a23;
+  border-radius: 4px;
+  font-style: normal;
+  font-size: 1rem;
+}
+
+.experience__wordmark--divide b {
+  color: #23a9dd;
+  font-weight: inherit;
+}
+
+.experience__wordmark--flalingo {
+  color: #18365f;
+  font-size: clamp(1.35rem,1.75vw,1.9rem);
+  font-weight: 800;
+  letter-spacing: -.055em;
+}
+
+.experience__wordmark--flalingo b {
+  color: #ff654e;
+  font-weight: inherit;
+}
+
+.experience__meta {
+  padding-top: 4.1rem;
+}
+
+@media (max-width: 900px) {
+  .experience__wordmark {
+    top: 3.55rem;
+    left: 1rem;
+    justify-content: flex-start;
+    transform: none;
+  }
+
+  .experience__wordmark--dogus img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .experience__meta {
+    padding-top: 3.75rem;
+  }
+}
+
+/* Borderless timeline: page surface itself is the container. */
+.experience__list {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.experience__item,
+.experience__item + .experience__item,
+.experience__item:hover,
+.experience__item--open {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.experience__role-side {
+  position: static;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  width: 100%;
+  margin-top: 1.15rem;
+  transform: none;
+}
+
+@media (max-width: 900px) {
+  .experience__list {
+    width: 100%;
+    padding: 0 0 0 38px;
+  }
+
+  .experience__list::before {
+    left: 12px;
+  }
+
+  .experience__item,
+  .experience__item + .experience__item {
+    width: 100%;
+    margin: 0;
+    padding: 3.5rem 0 2.5rem 1rem;
+    border: 0;
+  }
+
+  .experience__item + .experience__item {
+    border-top: 1px solid rgba(22,63,92,.09);
+  }
+
+  .experience__item::before,
+  .experience__item:first-child::before {
+    left: -32px;
+  }
+
+  .experience__period {
+    left: 0;
+  }
+
+  .experience__meta {
+    width: 100%;
+    padding-top: 2.75rem;
+  }
+
+  .experience__logo {
+    left: 1rem;
+  }
+
+  .experience__company-row {
+    width: 100%;
+    padding-top: 2.45rem;
+  }
+
+  .experience__body {
+    width: 100%;
+  }
+
+  .experience__role-side {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 1rem;
+    transform: none;
+  }
+}

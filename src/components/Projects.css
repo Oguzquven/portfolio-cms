@@ -1,0 +1,974 @@
+/* ============================================================
+   PROJECTS — Hero ile aynı oran sistemi:
+   kenar boşlukları clamp(1.5rem, 11vw, 14rem) → laptop = monitör
+   ============================================================ */
+
+.projects {
+  position: relative;
+  background: transparent;
+  padding: clamp(5rem, 12vh, 9rem) clamp(1.5rem, 11vw, 14rem);
+  scroll-margin-top: 90px; /* #work çapası navbar altında kalmasın */
+  overflow: hidden;
+}
+
+/* Artwork artık Hero + Projects'i saran tek ortak katmanda bulunuyor. */
+.projects::before {
+  content: none;
+}
+
+/* Hero ile aynı yatay okunabilirlik perdesi; dikey yönde değişmediği için
+   iki section sınırında opaklık sıçraması veya çizgi oluşturmaz. */
+.projects::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 45%,
+    rgba(255, 255, 255, 0.18) 75%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+}
+
+.projects__container {
+  position: relative; /* desen katmanlarının üstünde kal */
+  z-index: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---------- SCROLL-REVEAL ----------
+   JS (IntersectionObserver) satır görününce "is-visible" basar;
+   başlangıçta 36px aşağıda + şeffaf, sonra yerine süzülür */
+
+.projects__header,
+.project {
+  opacity: 0;
+  transform: translateY(36px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.projects__header.is-visible,
+.project.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- BAŞLIK ALANI ---------- */
+
+.projects__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-bottom: clamp(1.5rem, 3vh, 2.5rem);
+  border-bottom: 1px solid #cbd5df;
+}
+
+.projects__heading {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.4vh, 1.1rem);
+  min-width: 0;
+}
+
+.projects__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: clamp(0.72rem, 0.8vw, 0.82rem);
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #2188e8;
+}
+
+.projects__eyebrow-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2188e8;
+  flex-shrink: 0;
+}
+
+.projects__title {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2rem, 3.4vw, 3.75rem);
+  line-height: 1.15;
+  color: #252b49;
+}
+
+.projects__title em {
+  font-style: italic;
+  color: #2188e8;
+}
+
+/* Hayalet yıl — destekleyen tarayıcılarda içi boş çizgi yazı */
+.projects__year {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(2.5rem, 4vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #cbd5df;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+@supports (-webkit-text-stroke: 1px #cbd5df) {
+  .projects__year {
+    color: transparent;
+    -webkit-text-stroke: 1.5px #cbd5df;
+  }
+}
+
+/* ---------- PROJE SATIRLARI ---------- */
+
+.project {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4.5vw, 5.5rem);
+  align-items: center;
+  padding: clamp(3rem, 7vh, 6rem) 0;
+}
+
+/* Kardeş seçici: çizgi sadece satırların ARASINA girer,
+   ilk satırın üstüne veya son satırın altına çizilmez */
+.project + .project {
+  border-top: 1px solid rgba(203, 213, 223, 0.7);
+}
+
+/* Tek satırlarda görsel sağa geçer */
+.project--reverse .project__visual {
+  order: 2;
+}
+
+/* ---------- GÖRSEL TARAF ---------- */
+
+.project__visual {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #f3f5f7;
+  border: 1px solid rgba(203, 213, 223, 0.6);
+  box-shadow: 0 10px 30px rgba(22, 63, 92, 0.08);
+  transition:
+    transform 0.45s ease,
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+  min-width: 0;
+}
+
+.project:hover .project__visual {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 48px rgba(22, 63, 92, 0.16);
+  border-color: rgba(33, 136, 232, 0.4);
+}
+
+.project__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+
+.project:hover .project__image {
+  transform: scale(1.05);
+}
+
+/* Placeholder: palet gradyanı + nokta deseni + hayalet numara */
+.project__placeholder {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 28% 18%,
+      rgba(33, 136, 232, 0.45),
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 78% 85%,
+      rgba(242, 113, 120, 0.3),
+      transparent 55%
+    ),
+    linear-gradient(140deg, #163f5c 0%, #2188e8 100%);
+}
+
+.project__placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.18) 1.2px,
+    transparent 1.3px
+  );
+  background-size: 20px 20px;
+}
+
+.project__placeholder-number {
+  position: relative;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(4rem, 6vw, 7rem);
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.28);
+  user-select: none;
+}
+
+.project__placeholder-text {
+  position: relative;
+  font-size: clamp(0.62rem, 0.7vw, 0.72rem);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ---------- İÇERİK TARAFI ---------- */
+
+.project__content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 1.4vh, 1.25rem);
+}
+
+.project__top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.project__number {
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.3rem, 1.6vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1;
+  color: #cbd5df;
+}
+
+.project__category {
+  font-size: clamp(0.68rem, 0.75vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2188e8;
+  background: rgba(33, 136, 232, 0.08);
+  border: 1px solid rgba(33, 136, 232, 0.25);
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+  white-space: nowrap;
+}
+
+.project__title {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.6rem, 2.3vw, 2.6rem);
+  line-height: 1.2;
+  color: #252b49;
+  transition: color 0.3s ease;
+}
+
+.project:hover .project__title {
+  color: #2188e8;
+}
+
+.project__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.project__tag {
+  font-size: clamp(0.68rem, 0.78vw, 0.8rem);
+  font-weight: 500;
+  color: #163f5c;
+  background: #f3f5f7;
+  border: 1px solid #cbd5df;
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+  white-space: nowrap;
+}
+
+.project__description {
+  margin: 0;
+  max-width: 56ch;
+  font-size: clamp(0.88rem, 1vw, 1.05rem);
+  line-height: 1.75;
+  color: rgba(37, 43, 73, 0.75);
+}
+
+/* ---------- LINK ---------- */
+
+.project__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  margin-top: clamp(0.4rem, 0.8vh, 0.8rem);
+  padding-bottom: 5px;
+  font-size: clamp(0.78rem, 0.9vw, 0.92rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #2188e8;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+/* Navbar linklerindeki underline animasyonunun aynısı */
+.project__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.project__link:hover {
+  color: #163f5c;
+}
+
+.project__link:hover::after {
+  transform: scaleX(1);
+}
+
+.project__link-arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.project__link:hover .project__link-arrow {
+  transform: translate(3px, -3px);
+}
+
+/* ---------- MOBİL ---------- */
+
+@media (max-width: 900px) {
+  .project {
+    grid-template-columns: 1fr;
+    gap: clamp(1.5rem, 4vw, 2.25rem);
+    padding: clamp(2.5rem, 6vh, 4rem) 0;
+  }
+
+  /* Mobilde görsel hep üstte */
+  .project--reverse .project__visual {
+    order: 0;
+  }
+
+  .projects__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .projects__year {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .project__description {
+    max-width: none;
+  }
+}
+
+/* ---------- HAREKET AZALTMA TERCİHİ ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .projects__header,
+  .project {
+    opacity: 1;
+    transform: none;
+  }
+
+  .projects__header,
+  .project,
+  .project__visual,
+  .project__image,
+  .project__title,
+  .project__link,
+  .project__link::after,
+  .project__link-arrow {
+    transition: none;
+  }
+}
+
+/* Hero'daki mavi yüzey Projects boyunca devam eder ve burada sonlanır. */
+.projects {
+  background: #2188e8;
+  color: #ffffff;
+}
+
+.projects::after {
+  content: none;
+}
+
+.projects__header,
+.project + .project {
+  border-color: rgba(255, 255, 255, 0.32);
+}
+
+.projects__eyebrow,
+.projects__title,
+.projects__title em,
+.project__title,
+.project:hover .project__title,
+.project__description,
+.project__link {
+  color: #ffffff;
+}
+
+.projects__eyebrow-dot {
+  background: #f27178;
+}
+
+.projects__year,
+.project__number {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+@supports (-webkit-text-stroke: 1px #ffffff) {
+  .projects__year {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.72);
+  }
+}
+
+.project__category,
+.project__tag {
+  color: #ffffff;
+  background: rgba(22, 63, 92, 0.2);
+  border-color: rgba(255, 255, 255, 0.42);
+}
+
+.project__link:hover {
+  color: #252b49;
+}
+/* Ortak SVG dalganın Projects içine girebilmesi için zemin şeffaf;
+   başlık dalganın tamamlandığı mavi alanda başlar. */
+.projects {
+  background: transparent;
+  padding-top: clamp(9rem, 18vh, 13rem);
+}
+/* Mavi zeminde proje içeriğinin tipografi hiyerarşisi ve hover davranışı. */
+.project__content {
+  padding: clamp(1.5rem, 2.6vw, 2.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 24px;
+  background: rgba(247, 251, 255, 0.94);
+  box-shadow: 0 14px 36px rgba(22, 63, 92, 0.12);
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.project:hover .project__content {
+  transform: translateY(-6px);
+  border-color: rgba(242, 113, 120, 0.7);
+  box-shadow: 0 24px 52px rgba(22, 63, 92, 0.24);
+}
+
+.project__number {
+  color: #2188e8;
+}
+
+.project__category {
+  color: #163f5c;
+  background: rgba(33, 136, 232, 0.1);
+  border-color: rgba(33, 136, 232, 0.3);
+}
+
+.project__title,
+.project:hover .project__title {
+  color: #252b49;
+}
+
+.project:hover .project__title {
+  color: #f27178;
+}
+
+.project__tag {
+  color: #163f5c;
+  background: #f3f5f7;
+  border-color: #cbd5df;
+}
+
+.project__description {
+  color: rgba(37, 43, 73, 0.78);
+}
+
+.project__link {
+  color: #2188e8;
+}
+
+.project__link:hover {
+  color: #163f5c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project__content {
+    transition: none;
+  }
+}
+/* Kartsız editoryal proje satırı: içerik mavi dalganın doğal parçasıdır. */
+.project__content {
+  padding: clamp(0.75rem, 1.4vw, 1.4rem) 0 clamp(0.75rem, 1.4vw, 1.4rem)
+    clamp(1.5rem, 3vw, 3rem);
+  border: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transition:
+    transform 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.project--reverse .project__content {
+  padding-right: clamp(1.5rem, 3vw, 3rem);
+  padding-left: 0;
+  border-right: 1px solid rgba(255, 255, 255, 0.38);
+  border-left: 0;
+}
+
+.project:hover .project__content {
+  transform: translateY(-4px);
+  border-color: #f27178;
+  box-shadow: none;
+}
+
+.project__number {
+  color: #f27178;
+}
+
+.project__category {
+  color: #ffffff;
+  background: rgba(22, 63, 92, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.project__title {
+  color: #ffffff;
+}
+
+.project:hover .project__title {
+  color: #f27178;
+}
+
+.project__tag {
+  color: #ffffff;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.48);
+}
+
+.project__description {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.project__link {
+  color: #ffffff;
+}
+
+.project__link:hover {
+  color: #252b49;
+}
+
+.project__visual {
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 14px 34px rgba(22, 63, 92, 0.16);
+}
+
+.project:hover .project__visual {
+  border-color: #f27178;
+  box-shadow: 0 24px 52px rgba(22, 63, 92, 0.28);
+}
+
+@media (max-width: 900px) {
+  .project__content,
+  .project--reverse .project__content {
+    padding: 1.5rem 0 0;
+    border-right: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.38);
+  }
+
+  .project:hover .project__content {
+    border-top-color: #f27178;
+  }
+}
+/* Kodla oluşturulan proje tarayıcı mockup'ları. */
+.mockup{width:100%;height:100%;color:#252b49;background:#f7fbff;transition:transform .6s cubic-bezier(.2,.75,.25,1)}.project:hover .mockup{transform:scale(1.025) translateY(-3px)}
+.mockup--image{display:flex;flex-direction:column}.mockup__screenshot{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#edf3f7}.mockup--commerce .mockup__screenshot{background:#09b6d3}.mockup__screenshot img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+.project__visual--commerce-image{aspect-ratio:1.845 / 1}
+.project__visual--portfolio-image{aspect-ratio:1.835 / 1}
+/* Twitter görseli: tarayıcı mockup'ı korunurken ekran görüntüsü kırpılmadan tam oturur. */
+.project__visual--social-image{aspect-ratio:1.835 / 1}
+.mockup--image.mockup--social{background:#000}
+.mockup--image.mockup--social .mockup__browser{display:flex;flex:0 0 9%;min-height:34px}
+.mockup--image.mockup--social .mockup__screenshot{flex:1;min-height:0;background:#000}
+.mockup__browser{height:9%;min-height:34px;display:flex;align-items:center;gap:7px;padding:0 4%;background:#e8eef3;border-bottom:1px solid #cbd5df}.mockup__browser>span{width:8px;height:8px;border-radius:50%;background:#cbd5df}.mockup__browser>span:first-child{background:#f27178}.mockup__browser>span:nth-child(2){background:#2188e8}.mockup__address{width:52%;margin-left:3%;padding:5px 12px;border-radius:999px;background:#ffffffcc;font:500 clamp(7px,.55vw,10px) monospace;color:#678090}
+.mockup__commerce{height:91%;padding:4% 5%;background:#f7fbff}.mockup__shop-nav{display:flex;justify-content:space-between;align-items:center;font-size:clamp(7px,.62vw,11px);letter-spacing:.08em}.mockup__shop-nav b{font-size:clamp(12px,1.1vw,20px);color:#2188e8}.mockup__shop-head{display:flex;flex-direction:column;margin:4% 0 3%}.mockup__shop-head small{color:#f27178;font-size:clamp(6px,.52vw,9px);letter-spacing:.2em}.mockup__shop-head strong{font-family:"Playfair Display",serif;font-size:clamp(15px,1.65vw,30px)}.mockup__products{display:grid;grid-template-columns:repeat(3,1fr);gap:3%;height:56%}.mockup__product{display:flex;flex-direction:column;gap:4px;font-size:clamp(6px,.55vw,10px)}.mockup__product i{flex:1;min-height:55px;border-radius:8px;background:linear-gradient(145deg,#cbd5df,#9bcdf6)}.mockup__product:nth-child(2) i{background:linear-gradient(145deg,#f6c3c6,#f27178)}.mockup__product:nth-child(3) i{background:linear-gradient(145deg,#163f5c,#2188e8)}.mockup__product span{color:#2188e8;font-weight:700}
+.mockup__social{display:grid;grid-template-columns:20% 52% 28%;height:91%;font-size:clamp(6px,.58vw,10px)}.mockup__social aside,.mockup__social section{display:flex;flex-direction:column;gap:10%;padding:12% 14%;background:#f3f5f7}.mockup__social aside b{color:#2188e8;font-size:20px}.mockup__social main{padding:5%;border-inline:1px solid #cbd5df}.mockup__compose{display:flex;align-items:center;gap:5%;padding-bottom:5%;border-bottom:1px solid #cbd5df;color:#78909e}.mockup__compose i,.mockup__post i{width:22px;aspect-ratio:1;flex:0 0 auto;border-radius:50%;background:#2188e8}.mockup__compose button{margin-left:auto;border:0;border-radius:999px;padding:5px 9px;background:#2188e8;color:white;font-size:inherit}.mockup__post{display:flex;gap:5%;padding:6% 0;border-bottom:1px solid #dce4ea}.mockup__post:nth-child(3) i{background:#f27178}.mockup__post div{display:flex;flex-direction:column;gap:5px}.mockup__post span{color:#526b7a}.mockup__post small,.mockup__social section span{color:#2188e8}
+.mockup__aynova{position:relative;height:91%;overflow:hidden;padding:4% 5%;color:white;background:#163f5c}.mockup__aynova:after{content:"";position:absolute;width:42%;aspect-ratio:1;right:-12%;top:-30%;border-radius:50%;background:#2188e8}.mockup__aynova-nav{position:relative;z-index:1;display:flex;justify-content:space-between;font-size:clamp(7px,.58vw,10px)}.mockup__aynova-nav b{letter-spacing:.16em}.mockup__aynova-hero{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;margin-top:7%}.mockup__aynova-hero small{color:#f27178;letter-spacing:.16em;font-size:clamp(6px,.5vw,9px)}.mockup__aynova-hero strong{margin:2% 0 4%;font-family:"Playfair Display",serif;font-size:clamp(17px,1.9vw,34px);line-height:1}.mockup__aynova-hero em{color:#8fc9fa}.mockup__aynova-hero button{border:1px solid #ffffff8c;border-radius:999px;padding:7px 11px;color:white;background:transparent;font-size:clamp(6px,.5vw,9px)}.mockup__services{position:absolute;z-index:1;left:5%;right:5%;bottom:5%;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #ffffff40}.mockup__services div{display:flex;flex-direction:column;gap:4px;padding:8% 5%;border-right:1px solid #ffffff33;font-size:clamp(6px,.5vw,9px)}.mockup__services div:last-child{border:0}.mockup__services b{color:#f27178}@media(max-width:560px){.mockup__social section{display:none}.mockup__social{grid-template-columns:24% 76%}.mockup__products{height:48%}}
+/* Proje mockup'ının bağlantı olduğunu görünür kılan etkileşimler. */
+.project__visual {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.project__visual::after {
+  content: "OPEN PROJECT  ↗";
+  position: absolute;
+  z-index: 5;
+  right: 18px;
+  bottom: 18px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  color: #ffffff;
+  background: rgba(22, 63, 92, 0.88);
+  box-shadow: 0 8px 22px rgba(22, 63, 92, 0.22);
+  font-size: clamp(0.62rem, 0.7vw, 0.74rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  opacity: 0.92;
+  transform: translateY(0);
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.project__visual:hover::after,
+.project__visual:focus-visible::after {
+  color: #252b49;
+  background: #f27178;
+  border-color: #f7fbff;
+  box-shadow: 0 12px 28px rgba(22, 63, 92, 0.3);
+  transform: translateY(-4px);
+}
+
+.project__visual:focus-visible {
+  outline: 3px solid #f27178;
+  outline-offset: 5px;
+}
+
+.project__link:hover,
+.project__link:focus-visible {
+  color: #f27178;
+}
+
+.project__link:focus-visible {
+  outline: 2px solid #f27178;
+  outline-offset: 5px;
+  border-radius: 2px;
+}
+
+@media (max-width: 560px) {
+  .project__visual::after {
+    right: 12px;
+    bottom: 12px;
+    padding: 8px 10px;
+  }
+}
+/* Soft-tech / fluid minimalism: pastel dalgaya uyumlu Projects dili. */
+.projects__header {
+  align-items: center;
+  padding-bottom: clamp(1.25rem, 2.4vh, 2rem);
+  border-bottom: 0;
+}
+
+.projects__heading {
+  gap: 0.7rem;
+}
+
+.projects__eyebrow {
+  width: fit-content;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(22, 63, 92, 0.15);
+  font-size: clamp(0.65rem, 0.72vw, 0.75rem);
+  letter-spacing: 0.16em;
+}
+
+.projects__title {
+  font-family: var(--font-sans, "Inter", "Segoe UI", sans-serif);
+  font-size: clamp(2.4rem, 4.6vw, 5.25rem);
+  font-weight: 720;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.projects__title em {
+  font-family: inherit;
+  font-style: normal;
+  color: #b9ddfb;
+}
+
+@supports (-webkit-text-stroke: 1px #ffffff) {
+  .projects__year {
+    color: #ffffff;
+    -webkit-text-stroke: 0;
+  }
+}
+
+.projects__year {
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  border-radius: 999px;
+  background: rgba(22, 63, 92, 0.15);
+  font-family: var(--font-sans, "Inter", "Segoe UI", sans-serif);
+  font-size: clamp(0.72rem, 0.85vw, 0.9rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.project {
+  gap: clamp(2.2rem, 5vw, 6rem);
+  padding: clamp(3.5rem, 8vh, 6.5rem) 0;
+}
+
+.project + .project {
+  border-top: 0;
+}
+
+.project__content,
+.project--reverse .project__content {
+  padding: clamp(0.5rem, 1vw, 1rem) 0;
+  border: 0;
+}
+
+.project:hover .project__content {
+  transform: translateY(-3px);
+  border: 0;
+}
+
+.project__top {
+  gap: 0.65rem;
+}
+
+.project__number {
+  display: inline-grid;
+  place-items: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 0.65rem;
+  border-radius: 12px;
+  color: #252b49;
+  background: #f27178;
+  font-family: var(--font-sans, "Inter", "Segoe UI", sans-serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.project__category {
+  padding: 0.65rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(247, 251, 255, 0.14);
+  font-size: clamp(0.64rem, 0.72vw, 0.76rem);
+  letter-spacing: 0.08em;
+}
+
+.project__title {
+  font-family: var(--font-sans, "Inter", "Segoe UI", sans-serif);
+  font-size: clamp(2rem, 3.1vw, 3.6rem);
+  font-weight: 720;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.project__tags {
+  gap: 0.55rem;
+}
+
+.project__tag {
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(247, 251, 255, 0.12);
+  font-weight: 600;
+}
+
+.project__description {
+  max-width: 52ch;
+  font-size: clamp(0.9rem, 1.02vw, 1.08rem);
+  line-height: 1.7;
+}
+
+.project__link {
+  gap: 0.8rem;
+  margin-top: 0.65rem;
+  padding: 0.85rem 1.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 12px;
+  background: rgba(247, 251, 255, 0.12);
+  font-size: clamp(0.7rem, 0.78vw, 0.82rem);
+  letter-spacing: 0.1em;
+  transition: color .3s ease, background .3s ease, border-color .3s ease, transform .3s ease;
+}
+
+.project__link::after {
+  content: none;
+}
+
+.project__link:hover,
+.project__link:focus-visible {
+  color: #252b49;
+  background: #f27178;
+  border-color: #f27178;
+  transform: translateY(-3px);
+}
+
+.project__visual {
+  border-radius: 30px;
+}
+
+@media (max-width: 900px) {
+  .projects__header { align-items: flex-start; }
+  .projects__title { max-width: 9ch; }
+  .project__content,
+  .project--reverse .project__content { padding-top: 0.75rem; border: 0; }
+}
+/* Tıklanabilir proje başlıkları. */
+.project__title-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: fit-content;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.project__title-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 3px;
+  border-radius: 999px;
+  background: #f27178;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+.project__title-arrow {
+  display: inline-grid;
+  place-items: center;
+  width: clamp(32px, 2.5vw, 42px);
+  height: clamp(32px, 2.5vw, 42px);
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 12px;
+  color: #ffffff;
+  background: rgba(247, 251, 255, 0.1);
+  font-family: var(--font-primary, "Poppins", sans-serif);
+  font-size: 0.48em;
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.project__title-link:hover,
+.project__title-link:focus-visible {
+  color: #f27178;
+}
+
+.project__title-link:hover::after,
+.project__title-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.project__title-link:hover .project__title-arrow,
+.project__title-link:focus-visible .project__title-arrow {
+  color: #252b49;
+  background: #f27178;
+  border-color: #f27178;
+  transform: translate(3px, -3px);
+}
+
+.project__title-link:focus-visible {
+  outline: 2px solid #f27178;
+  outline-offset: 8px;
+  border-radius: 4px;
+}
+/* Proje başlığı sade bağlantı: ok ve alt çizgi yok. */
+.project__title-link {
+  gap: 0;
+}
+
+.project__title-link::after {
+  content: none;
+}
+
+.project__title-arrow {
+  display: none;
+}
+.projects__status {
+  margin: 2rem 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 600;
+}
+
+.projects__status--error {
+  color: #fff;
+}
+
+.project__visual > img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Mobil proje görselleri doğal geniş ekran oranını korur; kart bölümün
+   dar içerik kolonundan taşarak ekrana daha iyi oturur. */
+@media (max-width: 560px) {
+  .project__visual--commerce-image,
+  .project__visual--social-image,
+  .project__visual--portfolio-image {
+    width: calc(100% + 3rem);
+    max-width: calc(100vw - 2rem);
+    margin-inline: -1.5rem;
+    aspect-ratio: 5 / 3;
+  }
+
+  .mockup--image .mockup__screenshot img {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .project {
+    padding-top: 1.25rem;
+  }
+}
+
+/* Portfolio projesi için sitenin kendi hero düzenini yansıtan mini mockup */
+.mockup__portfolio{position:relative;height:91%;overflow:hidden;padding:4% 5%;background:#f4f9fd;color:#252b49}.mockup__portfolio nav{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;font-size:clamp(6px,.5vw,9px);letter-spacing:.08em}.mockup__portfolio nav b{font-size:clamp(13px,1.2vw,22px);color:#163f5c}.mockup__portfolio-copy{position:relative;z-index:2;display:flex;flex-direction:column;align-items:flex-start;width:62%;margin-top:6%}.mockup__portfolio-copy small{color:#2188e8;font-size:clamp(5px,.45vw,8px);font-weight:800;letter-spacing:.16em}.mockup__portfolio-copy strong{margin:3% 0 2%;font-family:"Playfair Display",serif;font-size:clamp(15px,1.65vw,30px);line-height:1.02}.mockup__portfolio-copy em{color:#2188e8}.mockup__portfolio-copy p{margin:0 0 4%;color:#526b7a;font-size:clamp(6px,.5vw,9px)}.mockup__portfolio-copy button{border:0;border-radius:6px;padding:6px 10px;background:#252b49;color:#fff;font-size:clamp(5px,.45vw,8px);font-weight:800}.mockup__portfolio-shape{position:absolute;z-index:0;width:62%;height:100%;right:-15%;top:0;border-radius:50% 0 0 50%;background:#2188e8}.mockup__portfolio-photo{position:absolute;z-index:1;right:7%;bottom:8%;width:24%;height:58%;border:4px solid #fff;border-radius:12px;background:#eaf2f8}.mockup__portfolio-photo i:first-child{position:absolute;width:30%;aspect-ratio:1;left:35%;top:18%;border-radius:50%;background:#f0c5b3}.mockup__portfolio-photo i:last-child{position:absolute;width:58%;height:42%;left:21%;bottom:0;border-radius:50% 50% 0 0;background:#163f5c}
