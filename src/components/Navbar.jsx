@@ -11,9 +11,23 @@ function Navbar({ settings }) {
   /* 24px'den fazla kaydırınca cam efektini aç */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
+    let frameId;
+    const syncScroll = () => {
+      window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(onScroll);
+    };
+
     onScroll(); // sayfa yenilendiğinde mevcut konumu hemen uygula
+    syncScroll(); // tarayıcının sonradan geri yüklediği scroll konumunu yakala
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("pageshow", syncScroll);
+    window.addEventListener("popstate", syncScroll);
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pageshow", syncScroll);
+      window.removeEventListener("popstate", syncScroll);
+    };
   }, []);
 
   const closeMenu = () => setMenuOpen(false);
