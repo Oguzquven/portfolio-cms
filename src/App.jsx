@@ -19,6 +19,7 @@ import "./NavbarOverride.css";
 import "./ProjectsOverride.css";
 import "./AboutOverride.css";
 import "./ExperienceColorOverride.css";
+import "./ProductionVisuals.css";
 
 function Portfolio() {
   const { locale } = useLanguage();
